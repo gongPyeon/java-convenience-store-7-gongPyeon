@@ -27,7 +27,7 @@ public class Validator {
     public void validateProduct(List<Product> products, ProductRepository productRepository) {
         for(int i=0; i<products.size(); i++){
             if(productRepository.findByName(products.get(i).getName()) == null)
-                throw new IllegalArgumentException(ERROR_PREFIX + "유효한 상품이 아닙니다. 다시 입력해 주세요");
+                throw new IllegalArgumentException(ERROR_PREFIX + "존재하지 않는 상품입니다. 다시 입력해 주세요");
         }
     }
 }
