@@ -75,8 +75,8 @@ public class Service {
         String[] productLine = productLineByFile.split(",");
         return new Product(
                 productLine[0],
-                Integer.parseInt(productLine[1]),
-                Integer.parseInt(productLine[2]),
+                productLine[1],
+                productLine[2],
                 productLine[3]);
     }
 
@@ -93,15 +93,14 @@ public class Service {
         List<Product> products = new ArrayList<>();
         for(int i = 0; i< productInfoBycart.length; i++){
             Product product = getProduct(productInfoBycart[i]);
-            validator.validateIsNull(product);
             products.add(product);
         }
 
         return products;
     }
 
-    private static Product getProduct(String split) {
-        String[] split1 = split.split("-");
-        return new Product(split1[0], Integer.parseInt(split1[1]));
+    private static Product getProduct(String productInfoBycart) {
+        String[] split = productInfoBycart.split("-");
+        return new Product(split[0], split[1]);
     }
 }
