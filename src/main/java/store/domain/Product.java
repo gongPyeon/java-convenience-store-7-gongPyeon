@@ -19,7 +19,7 @@ public class Product {
 
     public Product(String name, String quantity) {
         this.name = name;
-        this.quantity = validateNumber(quantity);;
+        this.quantity = validateNumber(quantity);
         this.price = 0;
         this.promotion = "";
 
