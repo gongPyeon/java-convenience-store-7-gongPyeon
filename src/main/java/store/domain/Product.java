@@ -2,33 +2,41 @@ package store.domain;
 
 public class Product {
     private final String name;
-    private final String price; // null일 경우 Integer
-    private final String quantity;
+    private final int price; // null일 경우 Integer
+    private final int quantity;
     private  final String promotion;
 
     public Product(String name, String price, String quantity, String promotion) {
-        validateNumber(price);
-        validateNumber(quantity);
         this.name = name;
-        this.price = price;
-        this.quantity = quantity;
+        this.price = validateNumber(price);
+        this.quantity = validateNumber(quantity);
         this.promotion = promotion;
+
+        validateNumberRange(this.price);
+        validateNumberRange(this.quantity);
     }
 
 
     public Product(String name, String quantity) {
-        validateNumber(quantity);
         this.name = name;
-        this.quantity = quantity;
-        this.price = "";
+        this.quantity = validateNumber(quantity);;
+        this.price = 0;
         this.promotion = "";
+
+        validateNumberRange(this.quantity);
     }
 
-    private void validateNumber(String string) {
+    private int validateNumber(String string) {
         try{
-            Integer.parseInt(string);
+            return Integer.parseInt(string);
         }catch (IllegalArgumentException e){
             throw new IllegalArgumentException("숫자가 아닙니다");
+        }
+    }
+
+    private void validateNumberRange(int num){
+        if(num <= 0){
+            throw new IllegalArgumentException("음수입니다");
         }
     }
 
