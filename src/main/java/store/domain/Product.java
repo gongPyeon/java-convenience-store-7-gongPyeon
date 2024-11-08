@@ -10,7 +10,7 @@ public class Product {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
-        this.promotion = promotion;
+        this.promotion = nullToEmpty(promotion);
     }
 
     public String getName() {
@@ -21,13 +21,17 @@ public class Product {
         return promotion;
     }
 
+    private String nullToEmpty(String promotion) {
+        if(promotion.equals("null"))
+            return "";
+        return promotion;
+    }
+
     @Override
     public String toString() {
-        return "Product{" +
-                "name='" + name + '\'' +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                ", promotion='" + promotion + '\'' +
-                '}';
+        return "- " + name + " " +
+                price + "원 "
+                + quantity + "개 "
+                + promotion;
     }
 }

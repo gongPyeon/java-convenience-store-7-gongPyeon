@@ -24,9 +24,8 @@ public class CSPromotionRepository implements PromotionRepository{
     public void print() {
         promotionList.entrySet().stream()
                 .forEach(entry -> {
-                    String key = entry.getKey();
-                    Promotions promotions = entry.getValue();
-                    System.out.println("키: " + key + ", 상품: " + promotions);
+                    Promotions promotion = entry.getValue();
+                    System.out.println(promotion);
                 });
     }
 }

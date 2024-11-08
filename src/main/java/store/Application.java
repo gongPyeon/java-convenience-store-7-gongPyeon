@@ -1,6 +1,8 @@
 package store;
 
 import store.controller.Controller;
+import store.message.Message;
+import store.message.MessageManager;
 import store.repository.*;
 import store.service.Service;
 import store.validator.Validator;
@@ -11,8 +13,9 @@ public class Application {
     public static void main(String[] args) {
         // TODO: 프로그램 구현
 
-        InputView inputView = new InputView();
-        OutputView outputView = new OutputView();
+        MessageManager manager = new Message();
+        InputView inputView = new InputView(manager);
+        OutputView outputView = new OutputView(manager);
         Validator validator = new Validator();
         ProductRepository productRepository = new CSProductRepository();
         PromotionProductRepository promotionProductRepository = new CSPromotionProductRepository();

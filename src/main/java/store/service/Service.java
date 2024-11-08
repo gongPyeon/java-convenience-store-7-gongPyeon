@@ -55,12 +55,13 @@ public class Service {
         for (int i = 1; i < productListByFile.size(); i++) {
             Product product = splitProductList(productListByFile.get(i));
             validator.validateIsNull(Optional.of(product));
+            System.out.println(product); // 어떻게 할지 생각해보기
             checkAndstoreProduct(product);
         }
     }
 
     private void checkAndstoreProduct(Product product) {
-        if (product.getPromotion().equals("null")) {
+        if (product.getPromotion().isEmpty()) {
             productRepository.save(product);
             return;
         }

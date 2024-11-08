@@ -25,9 +25,8 @@ public class CSProductRepository implements ProductRepository{
     public void print() {
         generalStock.entrySet().stream()
                 .forEach(entry -> {
-                    String key = entry.getKey();
                     Product product = entry.getValue();
-                    System.out.println("키: " + key + ", 상품: " + product);
+                    System.out.println(product);
                 });
     }
 }
