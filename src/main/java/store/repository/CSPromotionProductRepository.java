@@ -6,14 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CSPromotionProductRepository implements ProductRepository{
-    private static Map<String, Product> store = new HashMap<>();
+    private static Map<String, Product> promotionStork = new HashMap<>();
     @Override
     public void save(Product product) {
-        store.put(product.getName(), product);
+        promotionStork.put(product.getName(), product);
     }
 
     @Override
     public Product findByName(String productName) {
-        return store.get(productName);
+        return promotionStork.get(productName);
     }
 }
