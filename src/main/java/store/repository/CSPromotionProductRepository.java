@@ -25,4 +25,10 @@ public class CSPromotionProductRepository implements PromotionProductRepository{
                     System.out.println(product);
                 });
     }
+
+    @Override
+    public int findQuantityByName(String productName) {
+        Product product = findByName(productName);
+        return product.getQuantity();
+    }
 }

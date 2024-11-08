@@ -8,4 +8,5 @@ public interface PromotionProductRepository {
     Product findByName(String productName);
 
     void print();
+    int findQuantityByName(String productName);
 }

@@ -48,6 +48,10 @@ public class Product {
         return promotion;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
     private String nullToEmpty(String promotion) {
         if(promotion.equals("null"))
             return "";

@@ -92,6 +92,7 @@ public class Service {
 
         List<Product> products = createProduct(productInfoBycart);
         validator.validateProduct(products, productRepository);
+        validator.validateProductNum(products, productRepository, promotionProductRepository);
 
         for(int i=0; i<products.size(); i++){
             System.out.println(products.get(i));

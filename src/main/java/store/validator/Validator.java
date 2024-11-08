@@ -4,6 +4,7 @@ import store.common.constant.ValidConstatns;
 import store.domain.Product;
 import store.repository.CSProductRepository;
 import store.repository.ProductRepository;
+import store.repository.PromotionProductRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,17 @@ public class Validator {
         for(int i=0; i<products.size(); i++){
             if(productRepository.findByName(products.get(i).getName()) == null)
                 throw new IllegalArgumentException(ERROR_PREFIX + "존재하지 않는 상품입니다. 다시 입력해 주세요");
+        }
+    }
+
+    public void validateProductNum(List<Product> products,
+                                   ProductRepository productRepository,
+                                   PromotionProductRepository promotionProductRepository) {
+        for(int i=0; i<products.size(); i++){
+            int totalQuantity = productRepository.findQuantityByName(products.get(i).getName())
+                    + promotionProductRepository.findQuantityByName(products.get(i).getName());
+            if(totalQuantity < products.get(i).getQuantity())
+                throw new IllegalArgumentException(ERROR_PREFIX + "상품 수량이 부족합니다. 다시 입력해 주세요");
         }
     }
 }
