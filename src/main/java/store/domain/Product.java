@@ -13,6 +13,13 @@ public class Product {
         this.promotion = nullToEmpty(promotion);
     }
 
+    public Product(String name, int quantity) {
+        this.name = name;
+        this.quantity = quantity;
+        this.price = 0;
+        this.promotion = "";
+    }
+
     public String getName() {
         return name;
     }

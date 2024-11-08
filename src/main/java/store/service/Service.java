@@ -3,11 +3,14 @@ package store.service;
 import store.common.parser.FileParser;
 import store.domain.Product;
 import store.domain.Promotions;
+import store.domain.User;
+import store.dto.Cart;
 import store.repository.ProductRepository;
 import store.repository.PromotionProductRepository;
 import store.repository.PromotionRepository;
 import store.validator.Validator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,5 +78,30 @@ public class Service {
                 Integer.parseInt(productLine[1]),
                 Integer.parseInt(productLine[2]),
                 productLine[3]);
+    }
+
+    public Cart InputCart(String cartInfo) {
+        String[] productInfoBycart = cartInfo.split(",");
+        List<Product> products = createProduct(productInfoBycart);
+        User user = new User(false);
+        Cart cart = new Cart(products, user);
+
+        return cart;
+    }
+
+    private List<Product> createProduct(String[] productInfoBycart) {
+        List<Product> products = new ArrayList<>();
+        for(int i = 0; i< productInfoBycart.length; i++){
+            Product product = getProduct(productInfoBycart[i]);
+            validator.validateIsNull(product);
+            products.add(product);
+        }
+
+        return products;
+    }
+
+    private static Product getProduct(String split) {
+        String[] split1 = split.split("-");
+        return new Product(split1[0], Integer.parseInt(split1[1]));
     }
 }

@@ -9,10 +9,6 @@ public class Validator {
 
     private static final String ERROR_PREFIX = "[ERROR] ";
 
-    public void validate(){
-        return;
-    }
-
     public void validateIsNull(Optional optional) {
         if(optional.isEmpty()){
             // null exception
@@ -22,7 +18,7 @@ public class Validator {
 
     public void validateFormat(String string) {
         if (!string.matches(ValidConstatns.VALID_INPUT_PATTERN)) {
-            throw new IllegalArgumentException(ERROR_PREFIX + "입력받은 형식이 정해진 형식이 아닙니다.");
+            throw new IllegalArgumentException(ERROR_PREFIX + "올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요");
         }
     }
 }

@@ -1,6 +1,7 @@
 package store.controller;
 
 import store.domain.Product;
+import store.dto.Cart;
 import store.service.Service;
 import store.validator.Validator;
 import store.view.InputView;
@@ -26,16 +27,16 @@ public class Controller {
         String productFile = "products.md";
         String promotionFile = "promotions.md";
         service.storeProductAndPromotionsListByFile(productFile, promotionFile);
-        List<Product> produts = InputProductNameAndNum();
+        Cart cart = InputProductNameAndNum();
+
     }
 
-    private List<Product> InputProductNameAndNum() {
+    private Cart InputProductNameAndNum() {
         while(true){
             try{
-                String s = inputView.purchaseProduct();
-                System.out.println(s);
-                validator.validateFormat(s);
-                return null;
+                String cartInfo = inputView.purchaseProduct();
+                validator.validateFormat(cartInfo);
+                return service.InputCart(cartInfo);
             }catch (IllegalArgumentException e){
                 System.out.println(e.getMessage());
             }
