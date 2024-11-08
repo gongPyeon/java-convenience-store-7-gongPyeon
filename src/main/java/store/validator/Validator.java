@@ -2,7 +2,9 @@ package store.validator;
 
 import store.common.constant.ValidConstatns;
 import store.domain.Product;
+import store.repository.ProductRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public class Validator {
@@ -19,6 +21,13 @@ public class Validator {
     public void validateFormat(String string) {
         if (!string.matches(ValidConstatns.VALID_INPUT_PATTERN)) {
             throw new IllegalArgumentException(ERROR_PREFIX + "올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요");
+        }
+    }
+
+    public void validateProduct(List<Product> products, ProductRepository productRepository) {
+        for(int i=0; i<products.size(); i++){
+            if(productRepository.findByName(products.get(i).getName()) == null)
+                throw new IllegalArgumentException(ERROR_PREFIX + "유효한 상품이 아닙니다. 다시 입력해 주세요");
         }
     }
 }

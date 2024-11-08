@@ -91,6 +91,7 @@ public class Service {
                 .collect(Collectors.toList());
 
         List<Product> products = createProduct(productInfoBycart);
+        validator.validateProduct(products, productRepository);
         for(int i=0; i<products.size(); i++){
             System.out.println(products.get(i));
         }
