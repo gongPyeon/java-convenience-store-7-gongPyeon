@@ -13,7 +13,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class Validator {
 
@@ -32,21 +34,22 @@ public class Validator {
         }
     }
 
-    public void validateProduct(List<Product> products, ProductRepository productRepository) {
+    public void validateProduct(Map<Product, Integer> products, ProductRepository productRepository) {
         productRepository.print();
-        for(int i=0; i<products.size(); i++){
-            if(productRepository.findByName(products.get(i).getName()) == null)
+        for (Product product : products.keySet()) {
+            if (productRepository.findByName(product.getName()) == null) {
                 throw new IllegalArgumentException(ERROR_PREFIX + "존재하지 않는 상품입니다. 다시 입력해 주세요");
+            }
         }
     }
 
-    public void validateProductNum(List<Product> products,
+    public void validateProductNum(Map<Product, Integer> products,
                                    ProductRepository productRepository,
                                    PromotionProductRepository promotionProductRepository) {
-        for(int i=0; i<products.size(); i++){
-            int totalQuantity = productRepository.findQuantityByName(products.get(i).getName())
-                    + promotionProductRepository.findQuantityByName(products.get(i).getName());
-            if(totalQuantity < products.get(i).getQuantity())
+        for(Product product : products.keySet()){
+            int totalQuantity = productRepository.findQuantityByName(product.getName())
+                    + promotionProductRepository.findQuantityByName(product.getName());
+            if(totalQuantity < product.getQuantity())
                 throw new IllegalArgumentException(ERROR_PREFIX + "상품 수량이 부족합니다. 다시 입력해 주세요");
         }
     }
@@ -74,4 +77,9 @@ public class Validator {
         return true; // 행사기간 내 존재
     }
 
+    public void validateResponseFormat(String response) {
+        if(!response.matches("Y") || !response.matches("N")){
+            throw new IllegalArgumentException(ERROR_PREFIX + "응답 형식이 일치하지 않습니다. 다시 입력해주세요.");
+        }
+    }
 }

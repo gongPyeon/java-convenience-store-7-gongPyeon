@@ -12,10 +12,7 @@ import store.repository.PromotionProductRepository;
 import store.repository.PromotionRepository;
 import store.validator.Validator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -90,24 +87,21 @@ public class Service {
                 .map(String::trim)
                 .collect(Collectors.toList());
 
-        List<Product> products = createProduct(productInfoBycart);
+        Map<Product, Integer> products = createProduct(productInfoBycart);
         validator.validateProduct(products, productRepository);
         validator.validateProductNum(products, productRepository, promotionProductRepository);
 
-        for(int i=0; i<products.size(); i++){
-            System.out.println(products.get(i));
-        }
-        User user = new User(false);
-        Cart cart = new Cart(products, user);
-
-        return cart;
+//        for(int i=0; i<products.size(); i++){
+//            System.out.println(products.get(i));
+//        }
+        return new Cart(products, new User(false));
     }
 
-    private List<Product> createProduct(List<String> productInfoBycart) {
-        List<Product> products = new ArrayList<>();
+    private Map<Product, Integer> createProduct(List<String> productInfoBycart) {
+        Map<Product, Integer> products = new HashMap<>();
         for(int i = 0; i< productInfoBycart.size(); i++){
             Product product = getProduct(productInfoBycart.get(i));
-            products.add(product);
+            products.put(product, 0);
         }
 
         return products;
@@ -121,13 +115,13 @@ public class Service {
         return new Product(product.get(0), product.get(1));
     }
 
-    public void checkProductIsPromotion(Cart cart) {
-        List<Product> products = cart.getCart();
-        for(int i = 0; i< products.size(); i++) {
-            if(validator.validatePromotion(products.get(i), promotionRepository)){
-
+    public Cart checkProductIsPromotion(Cart cart) {
+        Map<Product, Integer> products = cart.getCart();
+        for(Product product : products.keySet()) {
+            if(validator.validatePromotion(product, promotionRepository)){
+                products.put(product, 1);
             }
-
         }
+        return new Cart(products, new User(false)); // 사용자 정보가 계속 왔다갔다 하고 있다
     }
 }

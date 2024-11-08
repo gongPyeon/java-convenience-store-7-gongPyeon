@@ -9,6 +9,7 @@ import store.view.InputView;
 import store.view.OutputView;
 
 import java.util.List;
+import java.util.Map;
 
 public class Controller {
     private final Service service;
@@ -28,9 +29,35 @@ public class Controller {
 
         service.storeProductAndPromotionsListByFile(InputConstants.PRODUCT_FILE, InputConstants.PROMOION_FILE);
         Cart cart = InputProductNameAndNum();
-        service.checkProductIsPromotion(cart);
-        //service.checkUserIsMemberShip(cart);
+        Cart checkCart = service.checkProductIsPromotion(cart);
 
+        for (Map.Entry<Product, Integer> entry : checkCart.getCart().entrySet()) {
+            // value가 1인 경우만 처리
+            if (entry.getValue() == 1) {
+                Product product = entry.getKey();
+
+                // 각 product에 대해 필요한 작업을 수행
+                InputAddProductByPromotion(product);
+                InputCheckPromotionStock();
+            }
+        }
+
+    }
+
+    private void InputCheckPromotionStock() {
+
+    }
+
+    private void InputAddProductByPromotion(Product product) {
+        while(true){
+            try{
+                String response = inputView.addProduct(product);
+                validator.validateResponseFormat(response);
+                return service.updateCart(response);
+            }catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     private Cart InputProductNameAndNum() {
