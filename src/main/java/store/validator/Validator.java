@@ -61,5 +61,17 @@ public class Validator {
         return true;
     }
 
+    public boolean validatePromotionDate(Promotions promotion, PromotionRepository promotionRepository) {
+        LocalDate currentDate = DateTimes.now().toLocalDate();
+        System.out.println(currentDate);
+
+        LocalDate startDate = LocalDate.parse(promotion.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate endDate = LocalDate.parse(promotion.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        if(startDate.isBefore(currentDate) || endDate.isBefore(currentDate))
+            return false;
+
+        return true; // 행사기간 내 존재
+    }
 
 }
