@@ -20,4 +20,14 @@ public class CSProductRepository implements ProductRepository{
     public Product findByName(String productName) {
         return generalStock.get(productName);
     }
+
+    @Override
+    public void print() {
+        generalStock.entrySet().stream()
+                .forEach(entry -> {
+                    String key = entry.getKey();
+                    Product product = entry.getValue();
+                    System.out.println("키: " + key + ", 상품: " + product);
+                });
+    }
 }

@@ -16,4 +16,18 @@ public class Product {
     public String getName() {
         return name;
     }
+
+    public String getPromotion() {
+        return promotion;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "name='" + name + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", promotion='" + promotion + '\'' +
+                '}';
+    }
 }

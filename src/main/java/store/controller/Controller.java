@@ -19,6 +19,8 @@ public class Controller {
     }
 
     public void run(){
-        service.storeProductAndEventListByFile();
+        String productFile = "products.md";
+        String promotionFile = "promotions.md";
+        service.storeProductAndPromotionsListByFile(productFile, promotionFile);
     }
 }

@@ -6,4 +6,6 @@ public interface PromotionProductRepository {
     void save(Product product);
 
     Product findByName(String productName);
+
+    void print();
 }
