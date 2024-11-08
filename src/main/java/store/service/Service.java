@@ -2,12 +2,14 @@ package store.service;
 
 import store.common.parser.FileParser;
 import store.domain.Product;
+import store.domain.Promotions;
 import store.repository.ProductRepository;
 import store.repository.PromotionProductRepository;
 import store.repository.PromotionRepository;
 import store.validator.Validator;
 
 import java.util.List;
+import java.util.Optional;
 
 public class Service {
 
@@ -29,20 +31,36 @@ public class Service {
     }
 
     private void storePromotionsListByFile(String promotionsFile) {
+        List<String> promotionListByFile = FileParser.readMarkdownFile(promotionsFile);
+        for (int i = 1; i < promotionListByFile.size(); i++) {
+            Promotions promotion = splitPromotionList(promotionListByFile.get(i));
+            validator.validateIsNull(Optional.of(promotion));
+            promotionRepository.save(promotion);
+        }
+    }
 
+    private Promotions splitPromotionList(String promotionLineByFile) {
+        String[] productLine = promotionLineByFile.split(",");
+        return new Promotions(
+                productLine[0],
+                Integer.parseInt(productLine[1]),
+                Integer.parseInt(productLine[2]),
+                productLine[3],
+                productLine[4]
+                );
     }
 
     private void storeProductListByFile(String productFile) {
         List<String> productListByFile = FileParser.readMarkdownFile(productFile);
-        for(int i=1; i<productListByFile.size(); i++){
+        for (int i = 1; i < productListByFile.size(); i++) {
             Product product = splitProductList(productListByFile.get(i));
-            System.out.println(product);
+            validator.validateIsNull(Optional.of(product));
             checkAndstoreProduct(product);
         }
     }
 
     private void checkAndstoreProduct(Product product) {
-        if(product.getPromotion().equals("null")){
+        if (product.getPromotion().equals("null")) {
             productRepository.save(product);
             return;
         }
@@ -50,16 +68,11 @@ public class Service {
     }
 
     private Product splitProductList(String productLineByFile) {
-        try {
-            String[] productLine = productLineByFile.split(",");
-            return new Product(
-                    productLine[0],
-                    Integer.parseInt(productLine[1]),
-                    Integer.parseInt(productLine[2]),
-                    productLine[3]);
-        } catch (NumberFormatException e) {
-            //throw IOException.CANNOT_PARSE_TO_INTEGER.getException();
-        }
-        return null;
+        String[] productLine = productLineByFile.split(",");
+        return new Product(
+                productLine[0],
+                Integer.parseInt(productLine[1]),
+                Integer.parseInt(productLine[2]),
+                productLine[3]);
     }
 }
