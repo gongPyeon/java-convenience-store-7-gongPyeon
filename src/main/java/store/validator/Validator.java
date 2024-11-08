@@ -1,11 +1,17 @@
 package store.validator;
 
+import camp.nextstep.edu.missionutils.DateTimes;
 import store.common.constant.ValidConstatns;
 import store.domain.Product;
+import store.domain.Promotions;
 import store.repository.CSProductRepository;
 import store.repository.ProductRepository;
 import store.repository.PromotionProductRepository;
+import store.repository.PromotionRepository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,4 +50,16 @@ public class Validator {
                 throw new IllegalArgumentException(ERROR_PREFIX + "상품 수량이 부족합니다. 다시 입력해 주세요");
         }
     }
+
+    public boolean validatePromotion(Product product, PromotionRepository promotionRepository) {
+        Promotions promotion = promotionRepository.findByName(product.getName());
+        if(promotion == null)
+            return false;
+
+        if(!validatePromotionDate(promotion, promotionRepository))
+            return false;
+        return true;
+    }
+
+
 }

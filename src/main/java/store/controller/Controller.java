@@ -1,5 +1,6 @@
 package store.controller;
 
+import store.common.constant.InputConstants;
 import store.domain.Product;
 import store.dto.Cart;
 import store.service.Service;
@@ -24,10 +25,11 @@ public class Controller {
 
     public void run(){
         outputView.welcome();
-        String productFile = "products.md";
-        String promotionFile = "promotions.md";
-        service.storeProductAndPromotionsListByFile(productFile, promotionFile);
+
+        service.storeProductAndPromotionsListByFile(InputConstants.PRODUCT_FILE, InputConstants.PROMOION_FILE);
         Cart cart = InputProductNameAndNum();
+        service.checkProductIsPromotion(cart);
+        //service.checkUserIsMemberShip(cart);
 
     }
 

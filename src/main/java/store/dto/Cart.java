@@ -16,4 +16,12 @@ public class Cart {
         this.cart = cart;
         this.user = user;
     }
+
+    public List<Product> getCart() {
+        return cart;
+    }
+
+    public User getUser() {
+        return user;
+    }
 }

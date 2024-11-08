@@ -120,4 +120,14 @@ public class Service {
                 .collect(Collectors.toList());
         return new Product(product.get(0), product.get(1));
     }
+
+    public void checkProductIsPromotion(Cart cart) {
+        List<Product> products = cart.getCart();
+        for(int i = 0; i< products.size(); i++) {
+            if(validator.validatePromotion(products.get(i), promotionRepository)){
+
+            }
+
+        }
+    }
 }
