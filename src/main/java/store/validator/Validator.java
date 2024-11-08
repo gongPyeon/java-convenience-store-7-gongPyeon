@@ -2,6 +2,7 @@ package store.validator;
 
 import store.common.constant.ValidConstatns;
 import store.domain.Product;
+import store.repository.CSProductRepository;
 import store.repository.ProductRepository;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class Validator {
     }
 
     public void validateProduct(List<Product> products, ProductRepository productRepository) {
+        productRepository.print();
         for(int i=0; i<products.size(); i++){
             if(productRepository.findByName(products.get(i).getName()) == null)
                 throw new IllegalArgumentException(ERROR_PREFIX + "존재하지 않는 상품입니다. 다시 입력해 주세요");

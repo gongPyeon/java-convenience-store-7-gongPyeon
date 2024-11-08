@@ -69,7 +69,7 @@ public class Service {
     }
 
     private void checkAndstoreProduct(Product product) {
-        if (product.getPromotion().isEmpty()) {
+        if (product.getPromotion().equals("null")) {
             productRepository.save(product);
             return;
         }
@@ -92,6 +92,7 @@ public class Service {
 
         List<Product> products = createProduct(productInfoBycart);
         validator.validateProduct(products, productRepository);
+
         for(int i=0; i<products.size(); i++){
             System.out.println(products.get(i));
         }
