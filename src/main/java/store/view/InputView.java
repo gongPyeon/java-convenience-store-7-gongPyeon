@@ -35,4 +35,8 @@ public class InputView {
         manager.printMessage(InputConstants.MEMBERSHIP_CHECK_INPUT);
         return manager.inputMessage();
     }
+
+    public String askForAdditionalPurchase(){
+        manager.printMessage(InputConstants.);
+    }
 }

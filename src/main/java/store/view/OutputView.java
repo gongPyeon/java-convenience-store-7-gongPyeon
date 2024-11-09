@@ -1,8 +1,11 @@
 package store.view;
 
 import store.common.constant.OutputConstants;
+import store.domain.Product;
 import store.dto.Receipt;
 import store.message.MessageManager;
+
+import java.util.List;
 
 public class OutputView {
 
@@ -17,6 +20,42 @@ public class OutputView {
     }
 
     public void print(Receipt receipt) {
-
+        printWelcomeMessage();
+        printProductList(receipt.getProductList());
+        printPromotionList(receipt.getPromotionList());
+        printSummary(receipt);
     }
+
+    private void printWelcomeMessage() {
+        manager.printMessage(OutputConstants.WERLCOME_OUTPUT + OutputConstants.CS_RECEIPT_OUTPUT);
+    }
+
+    private void printProductList(List<Product> productList) {
+        for (Product product : productList) {
+            manager.printMessage(String.format(OutputConstants.CS_RECEIPT_FORMAT_OUTPUT,
+                    product.getName(), product.getQuantity(), product.getPrice()));
+        }
+    }
+
+    private void printPromotionList(List<Product> promotionList) {
+        manager.printMessage(OutputConstants.CS_PROMOTION_OUTPUT);
+        for (Product product : promotionList) {
+            manager.printMessage(String.format(OutputConstants.CS_PROMOTION_FORMAT_OUTPUT,
+                    product.getName(), product.getQuantity()));
+        }
+    }
+
+    private void printSummary(Receipt receipt) {
+        int total = receipt.getTotal();
+        int promotionDiscount = receipt.getPromotionDiscount();
+        int membershipDiscount = receipt.getMembershipDiscount();
+        int money = receipt.getMoney();
+
+        manager.printMessage(OutputConstants.CS_OURPUT +
+                String.format(OutputConstants.CS_TOTAL_FORMAT_OUTPUT, total) +
+                String.format(OutputConstants.CS_P_DISCOUNT_FORMAT_OUTPUT, promotionDiscount) +
+                String.format(OutputConstants.CS_M_DISCOUNT_FORMAT_OUTPUT, membershipDiscount) +
+                String.format(OutputConstants.CS_MONEY_FORMAT_OUTPUT, money));
+    }
+
 }

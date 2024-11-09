@@ -158,32 +158,6 @@ public class Service {
         System.out.println("product.getPromotionCount() = " + product.getPromotionCount());
     }
 
-//    public int checkPromotionStock(OneCart onecart) {
-//        Product product = onecart.getProduct();
-//        int userQuantity = product.getQuantity();
-//
-//        int promotionStock = promotionProductRepository.findQuantityByName(product.getName());
-//        Product productByStock = promotionProductRepository.findByName(product.getName());
-//        int generalStock = productRepository.findQuantityByName(product.getName());
-//        Product productByGeneral = productRepository.findByName(product.getName());
-//
-//        if(promotionStock > userQuantity) {
-//            productByStock.updateQuantity(userQuantity);
-//            promotionProductRepository.update(productByStock);
-//            return 0;
-//        }
-//
-//        int num = userQuantity - promotionStock;
-//
-//        productByStock.updateQuantity(promotionStock);
-//        promotionProductRepository.update(productByStock);
-//        productByGeneral.updateQuantity(num);
-//        productRepository.update(productByGeneral);
-//
-//
-//        return num;
-//    }
-
     public Receipt calculator(Cart cart, boolean checkMemberShip) {
         List<Product> productList = calculateProductList(cart);
         List<Product> promotionList = calculatePromotionList(productList);

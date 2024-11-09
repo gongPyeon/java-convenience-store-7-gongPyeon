@@ -20,4 +20,28 @@ public class Receipt {
         this.membershipDiscount = membershipDiscount;
         this.money = money;
     }
+
+    public List<Product> getProductList() {
+        return productList;
+    }
+
+    public List<Product> getPromotionList() {
+        return promotionList;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public int getPromotionDiscount() {
+        return promotionDiscount;
+    }
+
+    public int getMembershipDiscount() {
+        return membershipDiscount;
+    }
+
+    public int getMoney() {
+        return money;
+    }
 }
