@@ -6,4 +6,8 @@ public class User {
     public User(boolean membership) {
         this.membership = membership;
     }
+
+    public boolean isMembership() {
+        return membership;
+    }
 }
