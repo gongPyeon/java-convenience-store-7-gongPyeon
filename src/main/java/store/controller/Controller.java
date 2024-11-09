@@ -33,26 +33,44 @@ public class Controller {
     }
 
     public void run(){
-        outputView.welcome();
+        while(true) {
+            outputView.welcome();
 
-        service.storeProductAndPromotionsListByFile(InputConstants.PRODUCT_FILE, InputConstants.PROMOION_FILE);
-        Cart cart = InputProductNameAndNum();
+            service.storeProductAndPromotionsListByFile(InputConstants.PRODUCT_FILE, InputConstants.PROMOION_FILE);
+            service.printProduct();
+            Cart cart = InputProductNameAndNum();
 
-        List<OneCart> promotableItems = service.filterPromotableItems(cart); // 프로모션 아이템만 가져오기
+            List<OneCart> promotableItems = service.filterPromotableItems(cart); // 유효한 프로모션 아이템만 가져오기
 
-        for(OneCart oneCart : promotableItems){
-            service.divideBuyAndGet(oneCart); // 증정품이 무엇인지 카운트
-            if(!service.isProductQuantityInsufficient(oneCart)) // 프로모션 목록인데, 증정품을 누락할 경우
-                InputAddProductByPromotion(oneCart);
-            if(!service.isPromotionStockInsufficient(oneCart)) // 프로모션 재고가 부족할 경우
-                InputCheckPromotionStock(oneCart);
+            for (OneCart oneCart : promotableItems) {
+                service.divideBuyAndGet(oneCart); // 증정품이 무엇인지 카운트
+                if (!service.isProductQuantityInsufficient(oneCart)) // 프로모션 목록인데, 증정품을 누락할 경우
+                    InputAddProductByPromotion(oneCart);
+                if (!service.isPromotionStockInsufficient(oneCart)) // 프로모션 재고가 부족할 경우
+                    InputCheckPromotionStock(oneCart);
+            }
+
+            boolean checkMemberShip = InputCheckMemberShip();
+            Receipt receipt = service.calculator(cart, checkMemberShip);
+            service.updateStock(cart);
+            outputView.print(receipt);
+            if(!InputAddionalPurchase())
+                break;
         }
+    }
 
-        boolean checkMemberShip = InputCheckMemberShip();
-        Receipt receipt = service.calculator(cart, checkMemberShip);
-        service.updateStock(cart);
-        outputView.print(receipt);
-
+    private boolean InputAddionalPurchase() {
+        while(true){
+            try{
+                String response = inputView.askForAdditionalPurchase(); // 그러면 증정품을 더 가져올거냐고 물어봐
+                validator.validateResponseFormat(response); // 응답 조건이 맞아?
+                if(response.equals("Y"))
+                    return true;
+                return false;
+            }catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     private boolean InputCheckMemberShip() {

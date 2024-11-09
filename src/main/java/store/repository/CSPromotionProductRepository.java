@@ -29,6 +29,7 @@ public class CSPromotionProductRepository implements PromotionProductRepository{
     @Override
     public int findQuantityByName(String productName) {
         Product product = findByName(productName);
+        if(product == null) return 0;
         return product.getQuantity();
     }
 

@@ -30,15 +30,15 @@ public class Validator {
 
     public void validateFormat(String string) {
         if (!string.matches(ValidConstatns.VALID_INPUT_PATTERN)) {
-            throw new IllegalArgumentException(ERROR_PREFIX + "올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요");
+            throw new IllegalArgumentException(ERROR_PREFIX + "올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
         }
     }
 
-    public void validateProduct(Map<Product, Promotions> products, ProductRepository productRepository) {
-        productRepository.print();
+    public void validateProduct(Map<Product, Promotions> products, ProductRepository productRepository,  PromotionProductRepository promotionProductRepository) {
+//        productRepository.print();
         for (Product product : products.keySet()) {
-            if (productRepository.findByName(product.getName()) == null) {
-                throw new IllegalArgumentException(ERROR_PREFIX + "존재하지 않는 상품입니다. 다시 입력해 주세요");
+            if (productRepository.findByName(product.getName()) == null && promotionProductRepository.findByName(product.getName()) == null) {
+                throw new IllegalArgumentException(ERROR_PREFIX + "존재하지 않는 상품입니다. 다시 입력해 주세요.");
             }
         }
     }
@@ -50,7 +50,7 @@ public class Validator {
             int totalQuantity = productRepository.findQuantityByName(product.getName())
                     + promotionProductRepository.findQuantityByName(product.getName());
             if(totalQuantity < product.getQuantity())
-                throw new IllegalArgumentException(ERROR_PREFIX + "상품 수량이 부족합니다. 다시 입력해 주세요");
+                throw new IllegalArgumentException(ERROR_PREFIX + "재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
         }
     }
 

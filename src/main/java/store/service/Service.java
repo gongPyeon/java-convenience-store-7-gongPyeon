@@ -20,6 +20,7 @@ public class Service {
     private final Validator validator;
     private final ProductRepository productRepository;
     private final PromotionProductRepository promotionProductRepository;
+
     private final PromotionRepository promotionRepository;
 
     public Service(Validator validator, ProductRepository productRepository, PromotionProductRepository promotionProductRepository, PromotionRepository promotionRepository) {
@@ -33,6 +34,7 @@ public class Service {
         storeProductListByFile(productFile);
         storePromotionsListByFile(promotionsFile);
     }
+
 
     private void storePromotionsListByFile(String promotionsFile) {
         List<String> promotionListByFile = FileParser.readMarkdownFile(promotionsFile);
@@ -54,22 +56,44 @@ public class Service {
         );
     }
 
+    private Set<String> productName = new LinkedHashSet<>();
     private void storeProductListByFile(String productFile) {
         List<String> productListByFile = FileParser.readMarkdownFile(productFile);
+
         for (int i = 1; i < productListByFile.size(); i++) {
             Product product = splitProductList(productListByFile.get(i));
             validator.validateIsNull(Optional.of(product));
-            System.out.println(product); // 어떻게 할지 생각해보기
+            productName.add(product.getName());
             checkAndstoreProduct(product);
         }
     }
 
+    public void printProduct(){
+        for(String name : productName){
+            Product product = productRepository.findByName(name);
+            if(product != null) {
+                System.out.println(product);
+            }
+            System.out.println(promotionProductRepository.findByName(name));
+        }
+    }
     private void checkAndstoreProduct(Product product) {
         if (product.getPromotion().equals("null")) {
             productRepository.save(product);
+
+            if(promotionProductRepository.findByName(product.getName()) == null) {
+                Product newProduct = new Product(product.getName(),
+                        Integer.toString(product.getPrice()), "0", "재고 없음");
+                promotionProductRepository.save(newProduct);
+            }
             return;
         }
         promotionProductRepository.save(product);
+        if(productRepository.findByName(product.getName()) == null){
+            Product newProduct = new Product(product.getName(),
+                    Integer.toString(product.getPrice()), "0", "재고 없음");
+            productRepository.save(newProduct);
+        }
     }
 
     private Product splitProductList(String productLineByFile) {
@@ -85,11 +109,9 @@ public class Service {
         List<String> productInfoBycart = Arrays.stream(cartInfo.split(ValidConstatns.SEPARATOR))
                 .map(String::trim)
                 .collect(Collectors.toList());
-
         Map<Product, Promotions> products = createProduct(productInfoBycart);
-        validator.validateProduct(products, productRepository);
+        validator.validateProduct(products, productRepository, promotionProductRepository);
         validator.validateProductNum(products, productRepository, promotionProductRepository);
-
 //        for(int i=0; i<products.size(); i++){
 //            System.out.println(products.get(i));
 //        }
@@ -119,9 +141,15 @@ public class Service {
                 .collect(Collectors.toList());
 
         String name = product.get(0);
-        String price = Integer.toString(productRepository.findByName(name).getPrice());
+        String price = Optional.ofNullable(promotionProductRepository.findByName(name))
+                .map(data -> Integer.toString(data.getPrice()))
+                .orElseGet(() -> Integer.toString(productRepository.findByName(name).getPrice()));
+        // 프로모션 재고에만 있을땐 어떻게 해야하지?
         String quantity = product.get(1);
-        String promotion = promotionProductRepository.findByName(name).getPromotion();
+        String promotion = Optional.ofNullable(promotionProductRepository.findByName(name))
+                .map(Product::getPromotion) // findByName이 null이 아니면 getPromotion() 호출
+                .orElse("null"); // findByName이 null일 경우 "null" 할당
+
 
         return new Product(name, price, quantity, promotion);
     }
@@ -136,37 +164,50 @@ public class Service {
         if (userQuantity > (buy + get)) { // 2+1인 품목을 7개 가져올 경우, 7 % 3 = 1
             // promotionCount = userQuantity % (buy + get);
             oneCart.getProduct().addPromotionCount();
-            System.out.println("promotionCount =  " + oneCart.getProduct().getPromotionCount() + " quantity =  " + oneCart.getProduct().getQuantity());
+            oneCart.getProduct().addQunatity(1);
+//            System.out.println("promotionCount =  " + oneCart.getProduct().getPromotionCount() + " quantity =  " + oneCart.getProduct().getQuantity());
             return;
         }
         // promotionCount = (buy + get) % userQuantity; // 2+1인 품목을 2개 가져올 경우, 3 % 2
         oneCart.getProduct().addPromotionCount();
-        System.out.println("promotionCount =  " + oneCart.getProduct().getPromotionCount() + " quantity =  " + oneCart.getProduct().getQuantity());
+        oneCart.getProduct().addQunatity(1);
+//        System.out.println("promotionCount =  " + oneCart.getProduct().getPromotionCount() + " quantity =  " + oneCart.getProduct().getQuantity());
     }
 
     public void updateQuantity(OneCart oneCart, int miss) {
         Product product = oneCart.getProduct();
         product.updatePromotionCount(miss);
         product.updateQunatity(miss);
-        System.out.println("promotionCount =  " + product.getPromotionCount() + " quantity =  " + product.getQuantity());
+//        System.out.println("promotionCount =  " + product.getPromotionCount() + " quantity =  " + product.getQuantity());
 
     }
 
     public void updatePromotionCount(OneCart oneCart, int miss) {
         Product product = oneCart.getProduct();
         product.updatePromotionCount(miss); // miss 제외
-        System.out.println("product.getPromotionCount() = " + product.getPromotionCount());
+//        System.out.println("product.getPromotionCount() = " + product.getPromotionCount());
     }
 
     public Receipt calculator(Cart cart, boolean checkMemberShip) {
         List<Product> productList = calculateProductList(cart);
         List<Product> promotionList = calculatePromotionList(productList);
         int total = calculateTotal(productList);
+        int totalNum = calculateTotalNum(productList);
         int promotionDiscount = calculatePromotion(promotionList);
-        int membershipDiscount = calculateMembership(total, checkMemberShip);
+        int membershipDiscount = calculateMembership(total - promotionDiscount, checkMemberShip);
         int money = calculateMoney(total, promotionDiscount, membershipDiscount);
 
-        return new Receipt(productList, promotionList, total, promotionDiscount, membershipDiscount, money);
+        return new Receipt(productList, promotionList, total, totalNum, promotionDiscount, membershipDiscount, money);
+    }
+
+    private int calculateTotalNum(List<Product> productList) {
+        int sum = 0;
+        for(int i=0; i<productList.size(); i++){
+            int quantity = productList.get(i).getQuantity();
+            sum += quantity;
+        }
+//        System.out.println("total num : " + sum);
+        return sum;
     }
 
     private int calculateMoney(int total, int promotionDiscount, int membershipDiscount) {
@@ -220,7 +261,7 @@ public class Service {
         for (Map.Entry<Product, Promotions> entry : cart.getCart().entrySet()) {
             Product product = entry.getKey();
             Promotions promotions = entry.getValue();
-            if (!validator.checkIsNull(Optional.of(promotions))) {
+            if (!validator.checkIsNull(Optional.ofNullable(promotions)) && validator.validatePromotion(product, promotionRepository)) {
 //                System.out.println(product + " / " + promotions);
                 promotableItems.add(new OneCart(product, promotions));
             }
@@ -236,7 +277,10 @@ public class Service {
 
     // 프로모션 조건에 맞게 증정품을 가져왔는지 확인하는 함수
     public boolean isPromotionSatisfied(int userQuantity, int requiredQuantity, int get) {
-        if (userQuantity % (requiredQuantity + get) == 0 || (requiredQuantity + get) % userQuantity == 0) {
+//        System.out.println(userQuantity);
+//        System.out.println(requiredQuantity + get);
+//        System.out.println(userQuantity % (requiredQuantity + get));
+        if (userQuantity % (requiredQuantity + get) == 0) { // (requiredQuantity + get) % userQuantity == 0)
             return true;
         }
         return false;
@@ -295,20 +339,27 @@ public class Service {
             updateProductRepository(product);
             updatePromotionProductRepository(product);
         }
-        promotionProductRepository.print();
-        productRepository.print();
+//        System.out.println("**promotionProductRepository**\n");
+//        promotionProductRepository.print();
+//        System.out.println("**productRepository**\n");
+//        productRepository.print();
+//        System.out.println();
     }
 
     private void updatePromotionProductRepository(Product product) {
         Product promotionByStock = promotionProductRepository.findByName(product.getName());
-        promotionByStock.updateQunatity(product.getPromotionCount()); // 기존 - 프로모션 개수
-        promotionProductRepository.update(promotionByStock);
+        if(promotionByStock != null){
+            promotionByStock.updateQunatity(product.getPromotionCount()); // 기존 - 프로모션 개수
+            promotionProductRepository.update(promotionByStock);
+        }
     }
 
     private void updateProductRepository(Product product) {
         Product productByStock = productRepository.findByName(product.getName());
-        int quantity = product.getQuantity() - product.getPromotionCount();
-        productByStock.updateQunatity(quantity); // 기존 - 프로모션 제외한 개수
-        productRepository.update(productByStock);
+        if(productByStock != null){
+            int quantity = product.getQuantity() - product.getPromotionCount();
+            productByStock.updateQunatity(quantity); // 기존 - 프로모션 제외한 개수
+            productRepository.update(productByStock);
+        };
     }
 }

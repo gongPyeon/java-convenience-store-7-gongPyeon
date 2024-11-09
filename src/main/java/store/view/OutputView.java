@@ -5,6 +5,7 @@ import store.domain.Product;
 import store.dto.Receipt;
 import store.message.MessageManager;
 
+import java.text.NumberFormat;
 import java.util.List;
 
 public class OutputView {
@@ -27,13 +28,13 @@ public class OutputView {
     }
 
     private void printWelcomeMessage() {
-        manager.printMessage(OutputConstants.WERLCOME_OUTPUT + OutputConstants.CS_RECEIPT_OUTPUT);
+        manager.printMessage(OutputConstants.CS_OUTPUT + OutputConstants.CS_RECEIPT_OUTPUT);
     }
 
     private void printProductList(List<Product> productList) {
         for (Product product : productList) {
             manager.printMessage(String.format(OutputConstants.CS_RECEIPT_FORMAT_OUTPUT,
-                    product.getName(), product.getQuantity(), product.getPrice()));
+                    product.getName(), product.getQuantity(), (product.getQuantity() *product.getPrice())));
         }
     }
 
@@ -41,21 +42,27 @@ public class OutputView {
         manager.printMessage(OutputConstants.CS_PROMOTION_OUTPUT);
         for (Product product : promotionList) {
             manager.printMessage(String.format(OutputConstants.CS_PROMOTION_FORMAT_OUTPUT,
-                    product.getName(), product.getQuantity()));
+                    product.getName(), product.getPromotionCount()));
         }
     }
 
     private void printSummary(Receipt receipt) {
         int total = receipt.getTotal();
+        int totalNum = receipt.getTotalNum();
         int promotionDiscount = receipt.getPromotionDiscount();
         int membershipDiscount = receipt.getMembershipDiscount();
         int money = receipt.getMoney();
 
         manager.printMessage(OutputConstants.CS_OURPUT +
-                String.format(OutputConstants.CS_TOTAL_FORMAT_OUTPUT, total) +
-                String.format(OutputConstants.CS_P_DISCOUNT_FORMAT_OUTPUT, promotionDiscount) +
-                String.format(OutputConstants.CS_M_DISCOUNT_FORMAT_OUTPUT, membershipDiscount) +
-                String.format(OutputConstants.CS_MONEY_FORMAT_OUTPUT, money));
+                String.format(OutputConstants.CS_TOTAL_FORMAT_OUTPUT, totalNum, NumberFormat.getInstance().format(total)) +
+                String.format(OutputConstants.CS_P_DISCOUNT_FORMAT_OUTPUT, NumberFormat.getInstance().format(promotionDiscount)) +
+                String.format(OutputConstants.CS_M_DISCOUNT_FORMAT_OUTPUT, NumberFormat.getInstance().format(membershipDiscount)) +
+                String.format(OutputConstants.CS_MONEY_FORMAT_OUTPUT, NumberFormat.getInstance().format(money)));
     }
 
+    public void printCSProductList(List<Product> products) {
+        for (Product product : products) {
+            System.out.println(product);
+        }
+    }
 }

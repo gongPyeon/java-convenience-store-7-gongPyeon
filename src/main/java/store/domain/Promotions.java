@@ -36,4 +36,15 @@ public class Promotions {
     public int getGet() {
         return get;
     }
+
+    @Override
+    public String toString() {
+        return "Promotions{" +
+                "name='" + name + '\'' +
+                ", buy=" + buy +
+                ", get=" + get +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                '}';
+    }
 }

@@ -21,7 +21,7 @@ public class Application {
         ProductRepository productRepository = new CSProductRepository();
         PromotionProductRepository promotionProductRepository = new CSPromotionProductRepository();
         PromotionRepository promotionRepository = new CSPromotionRepository();
-        User user = new User(false);
+        User user = new User(true);
 
         Service service = new Service(validator, productRepository, promotionProductRepository, promotionRepository);
         Controller controller = new Controller(service, inputView, outputView, validator, user);

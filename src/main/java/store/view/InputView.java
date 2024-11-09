@@ -37,6 +37,7 @@ public class InputView {
     }
 
     public String askForAdditionalPurchase(){
-        manager.printMessage(InputConstants.);
+        manager.printMessage(InputConstants.ADDITIONAL_INPUT);
+        return manager.inputMessage();
     }
 }
