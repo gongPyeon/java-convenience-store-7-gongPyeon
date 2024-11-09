@@ -50,6 +50,7 @@ public class Controller {
 
         boolean checkMemberShip = InputCheckMemberShip();
         Receipt receipt = service.calculator(cart, checkMemberShip);
+        service.updateStock(cart);
         outputView.print(receipt);
 
     }

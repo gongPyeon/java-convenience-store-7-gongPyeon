@@ -313,4 +313,28 @@ public class Service {
     }
 
 
+    public void updateStock(Cart cart) {
+        List<Product> products = calculateProductList(cart);
+
+        for(int i=0; i<products.size(); i++){
+            Product product = products.get(i);
+            updateProductRepository(product);
+            updatePromotionProductRepository(product);
+        }
+        promotionProductRepository.print();
+        productRepository.print();
+    }
+
+    private void updatePromotionProductRepository(Product product) {
+        Product promotionByStock = promotionProductRepository.findByName(product.getName());
+        promotionByStock.updateQunatity(product.getPromotionCount()); // 기존 - 프로모션 개수
+        promotionProductRepository.update(promotionByStock);
+    }
+
+    private void updateProductRepository(Product product) {
+        Product productByStock = productRepository.findByName(product.getName());
+        int quantity = product.getQuantity() - product.getPromotionCount();
+        productByStock.updateQunatity(quantity); // 기존 - 프로모션 제외한 개수
+        productRepository.update(productByStock);
+    }
 }
