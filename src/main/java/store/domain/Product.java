@@ -18,23 +18,10 @@ public class Product {
         validateNumberRange(this.quantity);
     }
 
-    public void addPromotionCount(){
-        promotionCount++;
+    public void updatePromotionCount(int num){
+        promotionCount = promotionCount - num;
     }
 
-    public void updateQuantity(int num){
-        quantity = quantity - num;
-    }
-
-
-    public Product(String name, String quantity) {
-        this.name = name;
-        this.quantity = validateNumber(quantity);
-        this.price = 0;
-        this.promotion = "";
-
-        validateNumberRange(this.quantity);
-    }
 
     private int validateNumber(String string) {
         try{
@@ -62,12 +49,6 @@ public class Product {
         return quantity;
     }
 
-    private String nullToEmpty(String promotion) {
-        if(promotion.equals("null"))
-            return "";
-        return promotion;
-    }
-
     @Override
     public String toString() {
         return "- " + name + " " +
@@ -78,5 +59,21 @@ public class Product {
 
     public void setPromotionCount(int promotionCount) {
         this.promotionCount = promotionCount;
+    }
+
+    public void addPromotionCount() {
+        this.promotionCount ++;
+    }
+
+    public void updateQunatity(int miss) {
+        quantity -= miss;
+    }
+
+    public int getPromotionCount() {
+        return promotionCount;
+    }
+
+    public int getPrice() {
+        return price;
     }
 }

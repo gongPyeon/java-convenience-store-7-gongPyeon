@@ -28,4 +28,12 @@ public class Promotions {
     public String getEndDate() {
         return endDate;
     }
+
+    public int getBuy() {
+        return buy;
+    }
+
+    public int getGet() {
+        return get;
+    }
 }

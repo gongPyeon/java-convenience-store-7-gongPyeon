@@ -78,7 +78,7 @@ public class Validator {
     }
 
     public void validateResponseFormat(String response) {
-        if(!response.matches("Y") || !response.matches("N")){
+        if(!(response.matches("Y") || response.matches("N"))){
             throw new IllegalArgumentException(ERROR_PREFIX + "응답 형식이 일치하지 않습니다. 다시 입력해주세요.");
         }
     }

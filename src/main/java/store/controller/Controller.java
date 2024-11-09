@@ -6,7 +6,7 @@ import store.domain.Promotions;
 import store.domain.User;
 import store.dto.Cart;
 import store.dto.Receipt;
-import store.dto.oneCart;
+import store.dto.OneCart;
 import store.service.Service;
 import store.validator.Validator;
 import store.view.InputView;
@@ -37,18 +37,15 @@ public class Controller {
 
         service.storeProductAndPromotionsListByFile(InputConstants.PRODUCT_FILE, InputConstants.PROMOION_FILE);
         Cart cart = InputProductNameAndNum();
-        //Cart checkCart = service.checkProductIsPromotion(cart);
 
-        for (Map.Entry<Product, Promotions> entry : cart.getCart().entrySet()) {
-            // value가 1인 경우만 처리 (프로모션이 가능한 경우)
-            Product product = entry.getKey();
-            Promotions promotions = entry.getValue();
-            if (!validator.checkIsNull(Optional.of(promotions))) {
-                // 각 product에 대해 필요한 작업을 수행
-                oneCart oneCart = new oneCart(product, promotions);
+        List<OneCart> promotableItems = service.filterPromotableItems(cart); // 프로모션 아이템만 가져오기
+
+        for(OneCart oneCart : promotableItems){
+            service.divideBuyAndGet(oneCart); // 증정품이 무엇인지 카운트
+            if(!service.isProductQuantityInsufficient(oneCart)) // 프로모션 목록인데, 증정품을 누락할 경우
                 InputAddProductByPromotion(oneCart);
+            if(!service.isPromotionStockInsufficient(oneCart)) // 프로모션 재고가 부족할 경우
                 InputCheckPromotionStock(oneCart);
-            }
         }
 
         boolean checkMemberShip = InputCheckMemberShip();
@@ -72,28 +69,32 @@ public class Controller {
         }
     }
 
-    private void InputCheckPromotionStock(oneCart onecart) {
+    private void InputCheckPromotionStock(OneCart oneCart) {
         while(true){
             try{
-                // 프로모션 재고가 없을 경우인지 check (update는 나중ㅇㅔ_)
-                int stock = service.checkPromotionStock(onecart);
-                String response = inputView.checkPromotion(onecart, stock);
+                int miss = service.calculateMissingPromotionQuantity(oneCart);
+                String response = inputView.checkPromotion(oneCart, miss); // miss개는 프로모션 적용이 안되는데 계산할거냐고 물어봐
                 validator.validateResponseFormat(response);
-                service.updateCartByStock(onecart, response, stock);
+
+                if(response.equals("Y"))
+                    service.updatePromotionCount(oneCart, miss);
+                if(response.equals("N"))
+                    service.updateQuantity(oneCart, miss);
+                return;
             }catch (IllegalArgumentException e){
                 System.out.println(e.getMessage());
             }
         }
     }
 
-    private void InputAddProductByPromotion(oneCart onecart) {
+    private void InputAddProductByPromotion(OneCart onecart) {
         while(true){
             try{
-                // 부족하게 가져왔을 경우인지 check
-                String response = inputView.addProduct(onecart);
-                validator.validateResponseFormat(response);
-                if(response.equals("Y"))
-                    service.updateCart(onecart);
+                String response = inputView.addProductByPromotion(onecart); // 그러면 증정품을 더 가져올거냐고 물어봐
+                validator.validateResponseFormat(response); // 응답 조건이 맞아?
+                if(response.equals("Y")) // Y이면
+                    service.updateCart(onecart); // 증정품 추가 -> 총 개수 늘리기
+                return;
             }catch (IllegalArgumentException e){
                 System.out.println(e.getMessage());
             }
