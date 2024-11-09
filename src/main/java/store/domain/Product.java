@@ -3,7 +3,7 @@ package store.domain;
 public class Product {
     private final String name;
     private final int price; // null일 경우 Integer
-    private final int quantity;
+    private int quantity;
     private  final String promotion;
 
     private int promotionCount = 0;
@@ -20,6 +20,10 @@ public class Product {
 
     public void addPromotionCount(){
         promotionCount++;
+    }
+
+    public void updateQuantity(int num){
+        quantity = quantity - num;
     }
 
 
@@ -70,5 +74,9 @@ public class Product {
                 price + "원 "
                 + quantity + "개 "
                 + promotion;
+    }
+
+    public void setPromotionCount(int promotionCount) {
+        this.promotionCount = promotionCount;
     }
 }

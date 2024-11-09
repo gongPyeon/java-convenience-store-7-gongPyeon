@@ -35,4 +35,9 @@ public class CSProductRepository implements ProductRepository{
         Product product = findByName(productName);
         return product.getQuantity();
     }
+
+    @Override
+    public void update(Product product) {
+        generalStock.put(product.getName(), product);
+    }
 }

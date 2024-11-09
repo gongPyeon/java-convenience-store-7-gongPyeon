@@ -44,8 +44,9 @@ public class Controller {
             Promotions promotions = entry.getValue();
             if (!validator.checkIsNull(Optional.of(promotions))) {
                 // 각 product에 대해 필요한 작업을 수행
-                InputAddProductByPromotion(new oneCart(product, promotions));
-                InputCheckPromotionStock();
+                oneCart oneCart = new oneCart(product, promotions);
+                InputAddProductByPromotion(oneCart);
+                InputCheckPromotionStock(oneCart);
             }
         }
 
@@ -54,18 +55,31 @@ public class Controller {
     }
 
     private void InputCheckMemberShip() {
-    }
-
-    private void InputCheckPromotionStock() {
 
     }
 
-    private void InputAddProductByPromotion(oneCart onecart) { // 수정하기
+    private void InputCheckPromotionStock(oneCart onecart) {
         while(true){
             try{
+                // 프로모션 재고가 없을 경우인지 check (update는 나중ㅇㅔ_)
+                int stock = service.checkPromotionStock(onecart);
+                String response = inputView.checkPromotion(onecart, stock);
+                validator.validateResponseFormat(response);
+                service.updateCartByStock(onecart, response, stock);
+            }catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void InputAddProductByPromotion(oneCart onecart) {
+        while(true){
+            try{
+                // 부족하게 가져왔을 경우인지 check
                 String response = inputView.addProduct(onecart);
                 validator.validateResponseFormat(response);
-                return service.updateCart(onecart);
+                if(response.equals("Y"))
+                    service.updateCart(onecart);
             }catch (IllegalArgumentException e){
                 System.out.println(e.getMessage());
             }

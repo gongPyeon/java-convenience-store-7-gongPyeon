@@ -10,4 +10,6 @@ public interface ProductRepository {
     void print();
 
     int findQuantityByName(String productName);
+
+    void update(Product product);
 }

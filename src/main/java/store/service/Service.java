@@ -132,6 +132,41 @@ public class Service {
 //    }
 
     public void updateCart(oneCart onecart) {
+        onecart.getProduct().addPromotionCount();
+    }
 
+    public void updateCartByStock(oneCart onecart, String response, int stock) {
+        Product product = onecart.getProduct();
+        if(response.equals("Y")){
+            product.setPromotionCount(product.getQuantity());
+            return;
+        }
+        product.updateQuantity(stock); // N일 경우 개수를 제거
+
+    }
+
+    public int checkPromotionStock(oneCart onecart) {
+        Product product = onecart.getProduct();
+        int userQuantity = product.getQuantity();
+        int promotionStock = promotionProductRepository.findQuantityByName(product.getName());
+        Product productByStock = promotionProductRepository.findByName(product.getName());
+        int generalStock = productRepository.findQuantityByName(product.getName());
+        Product productByGeneral = productRepository.findByName(product.getName());
+
+        if(promotionStock > userQuantity) {
+            productByStock.updateQuantity(userQuantity);
+            promotionProductRepository.update(productByStock);
+            return 0;
+        }
+
+        int num = userQuantity - promotionStock;
+
+        productByStock.updateQuantity(promotionStock);
+        promotionProductRepository.update(productByStock);
+        productByGeneral.updateQuantity(num);
+        productRepository.update(productByGeneral);
+
+
+        return num;
     }
 }

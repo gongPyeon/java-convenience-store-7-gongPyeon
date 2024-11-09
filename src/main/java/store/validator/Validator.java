@@ -85,8 +85,14 @@ public class Validator {
 
     public boolean checkIsNull(Optional optional) {
         if(optional.isEmpty()){
-            return treu;
+            return true;
         }
         return false;
+    }
+
+    public void validatePromotionStock(int userQuantity, int promotionStock) {
+        if(userQuantity > promotionStock){
+            throw new IllegalArgumentException(ERROR_PREFIX + "재고 상품이 부족합니다. 다시 입력해주세요.");
+        }
     }
 }

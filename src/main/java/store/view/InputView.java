@@ -22,4 +22,10 @@ public class InputView {
         manager.printMessage(String.format(InputConstants.PRODUCT_ADD_INPUT, product.getName(), product.getQuantity()));
         return manager.inputMessage();
     }
+
+    public String checkPromotion(oneCart onecart, int stock) {
+        Product product = onecart.getProduct();
+        manager.printMessage(String.format(InputConstants.PROMOTION_CHECK_INPUT, product.getName(), stock));
+        return manager.inputMessage();
+    }
 }

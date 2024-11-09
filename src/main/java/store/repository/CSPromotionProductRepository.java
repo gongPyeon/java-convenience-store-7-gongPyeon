@@ -31,4 +31,9 @@ public class CSPromotionProductRepository implements PromotionProductRepository{
         Product product = findByName(productName);
         return product.getQuantity();
     }
+
+    @Override
+    public void update(Product product) {
+        promotionStork.put(product.getName(), product);
+    }
 }
