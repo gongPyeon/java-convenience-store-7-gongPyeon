@@ -55,7 +55,15 @@ public class Controller {
     }
 
     private void InputCheckMemberShip() {
-
+        while(true){
+            try{
+                String response = inputView.checkMemberShip();
+                validator.validateResponseFormat(response);
+                // 멤버쉽을 받습니다를 어떻게 알리지?
+            }catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     private void InputCheckPromotionStock(oneCart onecart) {

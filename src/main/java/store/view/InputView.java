@@ -28,4 +28,9 @@ public class InputView {
         manager.printMessage(String.format(InputConstants.PROMOTION_CHECK_INPUT, product.getName(), stock));
         return manager.inputMessage();
     }
+
+    public String checkMemberShip() {
+        manager.printMessage(InputConstants.MEMBERSHIP_CHECK_INPUT);
+        return manager.inputMessage();
+    }
 }
