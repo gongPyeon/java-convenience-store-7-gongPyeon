@@ -7,6 +7,7 @@ import store.domain.Product;
 import store.domain.Promotions;
 import store.domain.User;
 import store.dto.Cart;
+import store.dto.oneCart;
 import store.repository.ProductRepository;
 import store.repository.PromotionProductRepository;
 import store.repository.PromotionRepository;
@@ -87,24 +88,29 @@ public class Service {
                 .map(String::trim)
                 .collect(Collectors.toList());
 
-        Map<Product, Integer> products = createProduct(productInfoBycart);
+        Map<Product, Promotions> products = createProduct(productInfoBycart);
         validator.validateProduct(products, productRepository);
         validator.validateProductNum(products, productRepository, promotionProductRepository);
 
 //        for(int i=0; i<products.size(); i++){
 //            System.out.println(products.get(i));
 //        }
-        return new Cart(products, new User(false));
+        return new Cart(products);
     }
 
-    private Map<Product, Integer> createProduct(List<String> productInfoBycart) {
-        Map<Product, Integer> products = new HashMap<>();
+    private Map<Product, Promotions> createProduct(List<String> productInfoBycart) {
+        Map<Product, Promotions> products = new HashMap<>();
         for(int i = 0; i< productInfoBycart.size(); i++){
             Product product = getProduct(productInfoBycart.get(i));
-            products.put(product, 0);
+            Promotions promotion = getPromotion(product.getPromotion());
+            products.put(product, promotion);
         }
 
         return products;
+    }
+
+    private Promotions getPromotion(String promotionName) {
+        return promotionRepository.findByName(promotionName);
     }
 
     private static Product getProduct(String productInfoBycart) {
@@ -115,13 +121,17 @@ public class Service {
         return new Product(product.get(0), product.get(1));
     }
 
-    public Cart checkProductIsPromotion(Cart cart) {
-        Map<Product, Integer> products = cart.getCart();
-        for(Product product : products.keySet()) {
-            if(validator.validatePromotion(product, promotionRepository)){
-                products.put(product, 1);
-            }
-        }
-        return new Cart(products, new User(false)); // 사용자 정보가 계속 왔다갔다 하고 있다
+//    public Cart checkProductIsPromotion(Cart cart) {
+//        Map<Product, Promotions> products = cart.getCart();
+//        for(Product product : products.keySet()) {
+//            if(validator.validatePromotion(product, promotionRepository)){
+//                products.put(product, 1);
+//            }
+//        }
+//        return new Cart(products, new User(false)); // 사용자 정보가 계속 왔다갔다 하고 있다
+//    }
+
+    public void updateCart(oneCart onecart) {
+
     }
 }

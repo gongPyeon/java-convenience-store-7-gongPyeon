@@ -34,7 +34,7 @@ public class Validator {
         }
     }
 
-    public void validateProduct(Map<Product, Integer> products, ProductRepository productRepository) {
+    public void validateProduct(Map<Product, Promotions> products, ProductRepository productRepository) {
         productRepository.print();
         for (Product product : products.keySet()) {
             if (productRepository.findByName(product.getName()) == null) {
@@ -43,7 +43,7 @@ public class Validator {
         }
     }
 
-    public void validateProductNum(Map<Product, Integer> products,
+    public void validateProductNum(Map<Product, Promotions> products,
                                    ProductRepository productRepository,
                                    PromotionProductRepository promotionProductRepository) {
         for(Product product : products.keySet()){
@@ -81,5 +81,12 @@ public class Validator {
         if(!response.matches("Y") || !response.matches("N")){
             throw new IllegalArgumentException(ERROR_PREFIX + "응답 형식이 일치하지 않습니다. 다시 입력해주세요.");
         }
+    }
+
+    public boolean checkIsNull(Optional optional) {
+        if(optional.isEmpty()){
+            return treu;
+        }
+        return false;
     }
 }

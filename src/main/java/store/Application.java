@@ -1,6 +1,7 @@
 package store;
 
 import store.controller.Controller;
+import store.domain.User;
 import store.message.Message;
 import store.message.MessageManager;
 import store.repository.*;
@@ -20,9 +21,10 @@ public class Application {
         ProductRepository productRepository = new CSProductRepository();
         PromotionProductRepository promotionProductRepository = new CSPromotionProductRepository();
         PromotionRepository promotionRepository = new CSPromotionRepository();
+        User user = new User(false);
 
         Service service = new Service(validator, productRepository, promotionProductRepository, promotionRepository);
-        Controller controller = new Controller(service, inputView, outputView, validator);
+        Controller controller = new Controller(service, inputView, outputView, validator, user);
         controller.run();
     }
 }

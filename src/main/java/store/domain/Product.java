@@ -6,6 +6,8 @@ public class Product {
     private final int quantity;
     private  final String promotion;
 
+    private int promotionCount = 0;
+
     public Product(String name, String price, String quantity, String promotion) {
         this.name = name;
         this.price = validateNumber(price);
@@ -14,6 +16,10 @@ public class Product {
 
         validateNumberRange(this.price);
         validateNumberRange(this.quantity);
+    }
+
+    public void addPromotionCount(){
+        promotionCount++;
     }
 
 

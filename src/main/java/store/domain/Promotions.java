@@ -1,5 +1,7 @@
 package store.domain;
 
+import java.util.Optional;
+
 public class Promotions {
     private final String name;
     private final int buy;
