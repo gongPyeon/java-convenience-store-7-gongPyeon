@@ -5,6 +5,7 @@ import store.domain.Product;
 import store.domain.Promotions;
 import store.domain.User;
 import store.dto.Cart;
+import store.dto.Receipt;
 import store.dto.oneCart;
 import store.service.Service;
 import store.validator.Validator;
@@ -50,18 +51,21 @@ public class Controller {
             }
         }
 
-        InputCheckMemberShip();
+        boolean checkMemberShip = InputCheckMemberShip();
+        Receipt receipt = service.calculator(cart, checkMemberShip);
+        outputView.print(receipt);
 
     }
 
-    private void InputCheckMemberShip() {
+    private boolean InputCheckMemberShip() {
         while(true){
             try{
                 if(user.isMembership()) {
                     String response = inputView.checkMemberShip();
                     validator.validateResponseFormat(response);
-                    // 멤버쉽을 받습니다를 어떻게 알리지?
+                    return user.checkMemberShip(response);
                 }
+                return false;
             }catch (IllegalArgumentException e){
                 System.out.println(e.getMessage());
             }

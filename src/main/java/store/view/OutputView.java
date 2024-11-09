@@ -1,6 +1,7 @@
 package store.view;
 
 import store.common.constant.OutputConstants;
+import store.dto.Receipt;
 import store.message.MessageManager;
 
 public class OutputView {
@@ -13,5 +14,9 @@ public class OutputView {
 
     public void welcome(){
         manager.printMessage(OutputConstants.WERLCOME_OUTPUT);
+    }
+
+    public void print(Receipt receipt) {
+
     }
 }

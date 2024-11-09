@@ -7,6 +7,7 @@ import store.domain.Product;
 import store.domain.Promotions;
 import store.domain.User;
 import store.dto.Cart;
+import store.dto.Receipt;
 import store.dto.oneCart;
 import store.repository.ProductRepository;
 import store.repository.PromotionProductRepository;
@@ -168,5 +169,8 @@ public class Service {
 
 
         return num;
+    }
+
+    public Receipt calculator(Cart cart, boolean checkMemberShip) {
     }
 }

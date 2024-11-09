@@ -10,4 +10,11 @@ public class User {
     public boolean isMembership() {
         return membership;
     }
+
+    public boolean checkMemberShip(String response) {
+        if(response.equals("Y")){
+            return true;
+        }
+        return  false;
+    }
 }
