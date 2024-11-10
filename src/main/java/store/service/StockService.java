@@ -6,15 +6,12 @@ import store.common.parser.ProductParser;
 import store.common.parser.PromotionsParser;
 import store.domain.Product;
 import store.domain.Promotions;
+import store.dto.Cart;
 import store.repository.ProductRepository;
 import store.repository.PromotionProductRepository;
 import store.repository.PromotionRepository;
 import store.validator.Validator;
-
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 public class StockService {
 
@@ -23,9 +20,6 @@ public class StockService {
     private final PromotionProductRepository promotionProductRepository;
 
     private final PromotionRepository promotionRepository;
-
-    private static final String OUT_OF_STOCK = "재고 없음";
-    private static final String ZERO = "0";
 
     public StockService(Validator validator, ProductRepository productRepository, PromotionProductRepository promotionProductRepository, PromotionRepository promotionRepository) {
         this.validator = validator;
@@ -86,8 +80,37 @@ public class StockService {
     }
 
     private Product createDefaultProduct(Product product) {
-        return new Product(product.getName(), Integer.toString(product.getPrice()), ZERO, OUT_OF_STOCK);
+        return new Product(product.getName(), Integer.toString(product.getPrice()), Format.ZERO, Format.OUT_OF_STOCK);
     }
 
+    private List<Product> calculateProductList(Cart cart) {
+        return cart.getCart().keySet().stream().toList();
+    }
+    public void updateStock(Cart cart) {
+        List<Product> products = calculateProductList(cart);
+
+        for(int i=0; i<products.size(); i++){
+            Product product = products.get(i);
+            updateProductRepository(product);
+            updatePromotionProductRepository(product);
+        }
+    }
+
+    private void updatePromotionProductRepository(Product product) {
+        Product promotionByStock = promotionProductRepository.findByName(product.getName());
+        if(promotionByStock != null){
+            promotionByStock.updateQunatity(product.getPromotionCount()); // 기존 - 프로모션 개수
+            promotionProductRepository.update(promotionByStock);
+        }
+    }
+
+    private void updateProductRepository(Product product) {
+        Product productByStock = productRepository.findByName(product.getName());
+        if(productByStock != null){
+            int quantity = product.getQuantity() - product.getPromotionCount();
+            productByStock.updateQunatity(quantity); // 기존 - 프로모션 제외한 개수
+            productRepository.update(productByStock);
+        };
+    }
 
 }

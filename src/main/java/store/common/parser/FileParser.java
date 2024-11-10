@@ -12,15 +12,12 @@ public class FileParser {
         List<String> list = new ArrayList<>();
         try (InputStream inputStream = FileParser.class.getClassLoader().getResourceAsStream(fileName);
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-
             String line;
-            while ((line = reader.readLine()) != null) {
-                list.add(line);
-            }
+            while ((line = reader.readLine()) != null) { list.add(line); }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return list;
-    } // 13, static을 언제 쓰지?
+    }
 
 }

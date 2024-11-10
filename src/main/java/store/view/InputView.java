@@ -1,43 +1,38 @@
 package store.view;
 
+import camp.nextstep.edu.missionutils.Console;
 import store.common.constant.InputConstants;
 import store.domain.Product;
 import store.domain.Promotions;
 import store.dto.OneCart;
-import store.io.IOManager;
 
 public class InputView {
-    private final IOManager manager;
-
-    public InputView(IOManager manager) {
-        this.manager = manager;
-    }
 
     public String purchaseProduct(){
-        manager.printMessage(InputConstants.PRODUCT_NAME_NUMBER_INPUT);
-        return manager.inputMessage();
+        System.out.println(InputConstants.PRODUCT_NAME_NUMBER_INPUT);
+        return Console.readLine();
     }
 
     public String addProductByPromotion(OneCart onecart) {
         Product product = onecart.getProduct();
         Promotions promotions = onecart.getPromotions();
-        manager.printMessage(String.format(InputConstants.PRODUCT_ADD_INPUT, product.getName(), promotions.getGet()));
-        return manager.inputMessage();
+        System.out.println(String.format(InputConstants.PRODUCT_ADD_INPUT, product.getName(), promotions.getGet()));
+        return Console.readLine();
     }
 
     public String checkPromotion(OneCart onecart, int stock) {
         Product product = onecart.getProduct();
-        manager.printMessage(String.format(InputConstants.PROMOTION_CHECK_INPUT, product.getName(), stock));
-        return manager.inputMessage();
+        System.out.println(String.format(InputConstants.PROMOTION_CHECK_INPUT, product.getName(), stock));
+        return Console.readLine();
     }
 
     public String checkMemberShip() {
-        manager.printMessage(InputConstants.MEMBERSHIP_CHECK_INPUT);
-        return manager.inputMessage();
+        System.out.println(InputConstants.MEMBERSHIP_CHECK_INPUT);
+        return Console.readLine();
     }
 
     public String askForAdditionalPurchase(){
-        manager.printMessage(InputConstants.ADDITIONAL_INPUT);
-        return manager.inputMessage();
+        System.out.println(InputConstants.ADDITIONAL_INPUT);
+        return Console.readLine();
     }
 }

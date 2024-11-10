@@ -1,5 +1,7 @@
 package store.domain;
 
+import store.common.format.Format;
+
 public class User {
     private final boolean membership;
 
@@ -12,7 +14,7 @@ public class User {
     }
 
     public boolean checkMemberShip(String response) {
-        if(response.equals("Y")){
+        if(response.equals(Format.YES)){
             return true;
         }
         return  false;
