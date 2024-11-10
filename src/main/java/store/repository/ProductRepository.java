@@ -2,6 +2,8 @@ package store.repository;
 
 import store.domain.Product;
 
+import java.util.Set;
+
 public interface ProductRepository {
     void save(Product product);
 
@@ -12,4 +14,6 @@ public interface ProductRepository {
     int findQuantityByName(String productName);
 
     void update(Product product);
+
+    Set<String> getKey();
 }

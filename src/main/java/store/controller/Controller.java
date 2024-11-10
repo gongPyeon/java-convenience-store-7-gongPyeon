@@ -40,7 +40,7 @@ public class Controller {
             outputView.welcome();
 
             stockService.storeProductAndPromotionsListByFile(Format.PRODUCT_FILE, Format.PROMOION_FILE);
-            service.printProduct();
+            outputView.printProduct(service.getProductSet());
             Cart cart = InputProductNameAndNum();
 
             List<OneCart> promotableItems = service.filterPromotableItems(cart); // 유효한 프로모션 아이템만 가져오기

@@ -60,6 +60,8 @@ public class StockService {
         }
     }
 
+    // 파일에 하나만 적혀있어도(예를들어, 오렌지주스 반짝할인)
+    // productRepository와 promotionProductRepository에 동일한 상품이 존재해야한다
     private void checkAndStoreProducts(Product product) {
         if (product.getPromotion().equals(Format.NULL)) {
             productRepository.save(product);

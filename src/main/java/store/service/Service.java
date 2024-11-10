@@ -30,32 +30,18 @@ public class Service {
         this.promotionRepository = promotionRepository;
     }
 
-    public void printProduct(){ // 이걸 분리해야할 것 같습니다
-        for(String name : productName){
+    public List<Product> getProductSet(){
+        Set<String> productNames = productRepository.getKey();
+        List<Product> products = new LinkedList<>();
+
+        for(String name : productNames){
             Product product = productRepository.findByName(name);
             if(product != null) {
-                System.out.println(product);
+                products.add(product);
             }
-            System.out.println(promotionProductRepository.findByName(name));
+            products.add(promotionProductRepository.findByName(name));
         }
-    }
-    private void checkAndstoreProduct(Product product) {
-        if (product.getPromotion().equals("null")) {
-            productRepository.save(product);
-
-            if(promotionProductRepository.findByName(product.getName()) == null) {
-                Product newProduct = new Product(product.getName(),
-                        Integer.toString(product.getPrice()), "0", "재고 없음");
-                promotionProductRepository.save(newProduct);
-            }
-            return;
-        }
-        promotionProductRepository.save(product);
-        if(productRepository.findByName(product.getName()) == null){
-            Product newProduct = new Product(product.getName(),
-                    Integer.toString(product.getPrice()), "0", "재고 없음");
-            productRepository.save(newProduct);
-        }
+        return products;
     }
 
 

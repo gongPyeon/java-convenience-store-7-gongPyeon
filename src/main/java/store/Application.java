@@ -6,6 +6,7 @@ import store.io.IOManager;
 import store.io.IOMessage;
 import store.repository.*;
 import store.service.Service;
+import store.service.StockService;
 import store.validator.Validator;
 import store.view.InputView;
 import store.view.OutputView;
@@ -24,7 +25,8 @@ public class Application {
         User user = new User(true);
 
         Service service = new Service(validator, productRepository, promotionProductRepository, promotionRepository);
-        Controller controller = new Controller(service, inputView, outputView, validator, user);
+        StockService stockService = new StockService(validator, productRepository, promotionProductRepository, promotionRepository);
+        Controller controller = new Controller(service, stockService, inputView, outputView, validator, user);
         controller.run();
     }
 }

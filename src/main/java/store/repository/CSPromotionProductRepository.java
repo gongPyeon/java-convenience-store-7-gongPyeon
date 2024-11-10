@@ -2,11 +2,11 @@ package store.repository;
 
 import store.domain.Product;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CSPromotionProductRepository implements PromotionProductRepository{
-    private static Map<String, Product> promotionStork = new HashMap<>();
+    private static Map<String, Product> promotionStork = new LinkedHashMap<>();
     @Override
     public void save(Product product) {
         promotionStork.put(product.getName(), product);

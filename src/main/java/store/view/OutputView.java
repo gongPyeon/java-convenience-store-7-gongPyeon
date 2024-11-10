@@ -7,6 +7,7 @@ import store.io.IOManager;
 
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Set;
 
 public class OutputView {
 
@@ -60,9 +61,11 @@ public class OutputView {
                 String.format(OutputConstants.CS_MONEY_FORMAT_OUTPUT, NumberFormat.getInstance().format(money)));
     }
 
-    public void printCSProductList(List<Product> products) {
-        for (Product product : products) {
-            System.out.println(product);
+    public void printProduct(List<Product> productNames) { // domain param
+        for(Product product : productNames){
+            if(product != null) {
+                manager.printMessage(product);
+            }
         }
     }
 }

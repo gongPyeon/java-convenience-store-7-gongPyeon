@@ -2,15 +2,16 @@ package store.repository;
 
 import store.domain.Product;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * CS mean ConvenienceStore
  */
 public class CSProductRepository implements ProductRepository{
 
-    private static Map<String, Product> generalStock = new HashMap<>();
+    private static Map<String, Product> generalStock = new LinkedHashMap<>();
     @Override
     public void save(Product product) {
         generalStock.put(product.getName(), product);
@@ -41,4 +42,7 @@ public class CSProductRepository implements ProductRepository{
     public void update(Product product) {
         generalStock.put(product.getName(), product);
     }
+
+    @Override
+    public Set<String> getKey(){ return generalStock.keySet();}
 }
