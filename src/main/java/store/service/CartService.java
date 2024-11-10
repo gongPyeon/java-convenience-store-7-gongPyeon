@@ -46,7 +46,7 @@ public class CartService {
         Map<Product, Promotions> products = new HashMap<>();
 
         for (int i = 0; i < productInfoBycart.size(); i++) {
-            Product product = createProductFromInfo(productInfoBycart, i);
+            Product product = createProductFromInfo(productInfoBycart.get(i));
             Promotions promotion = createPromotionForProduct(product);
             products.put(product, promotion);
         }
@@ -58,8 +58,8 @@ public class CartService {
         return promotion;
     }
 
-    private Product createProductFromInfo(List<String> productInfoBycart, int i) {
-        Product product = getProduct(productInfoBycart.get(i));
+    private Product createProductFromInfo(String productInfoBycart) {
+        Product product = getProduct(productInfoBycart);
         validator.validateIsNull(product);
         return product;
     }
