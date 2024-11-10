@@ -38,6 +38,7 @@ public class CartService {
         Map<Product, Promotions> products = createProduct(productInfoByCart);
         validator.validateProduct(products, productRepository, promotionProductRepository);
         validator.validateProductNum(products, productRepository, promotionProductRepository);
+        validator.validateDuplicate(products);
 
         return new Cart(products);
     }

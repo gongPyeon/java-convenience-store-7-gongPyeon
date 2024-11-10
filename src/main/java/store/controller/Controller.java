@@ -16,8 +16,6 @@ import store.view.InputView;
 import store.view.OutputView;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class Controller {
     private final ReceiptService receiptService;

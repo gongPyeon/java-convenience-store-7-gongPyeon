@@ -11,8 +11,10 @@ import store.repository.PromotionRepository;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class Validator {
 
@@ -71,6 +73,15 @@ public class Validator {
     public void validateResponseFormat(String response) {
         if(!(response.matches(Format.YES) || response.matches(Format.NO))){
             throw ErrorMessage.INVALID_INPUT.getException();
+        }
+    }
+
+    public void validateDuplicate(Map<Product, Promotions> products) {
+        Set<String> uniqueProducts = new HashSet<>();  // 중복 확인을 위한 Set 생성
+        for (Product product : products.keySet()) {
+            if (!uniqueProducts.add(product.getName())) {  // 중복일 경우 add가 false를 반환
+                throw ErrorMessage.DUPLICATE_PRODUCT.getException();
+            }
         }
     }
 }
