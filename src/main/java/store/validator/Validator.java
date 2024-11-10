@@ -1,35 +1,30 @@
 package store.validator;
 
 import camp.nextstep.edu.missionutils.DateTimes;
-import store.common.constant.ValidConstatns;
+import store.common.format.Format;
 import store.domain.Product;
 import store.domain.Promotions;
-import store.repository.CSProductRepository;
 import store.repository.ProductRepository;
 import store.repository.PromotionProductRepository;
 import store.repository.PromotionRepository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 public class Validator {
 
     private static final String ERROR_PREFIX = "[ERROR] ";
 
-    public void validateIsNull(Optional optional) {
-        if(optional.isEmpty()){
-            // null exception
+    public void validateIsNull(Object object) {
+        if(object == null){
             throw new IllegalArgumentException(ERROR_PREFIX + "객체가 생성되지 않았습니다.");
         }
     }
 
     public void validateFormat(String string) {
-        if (!string.matches(ValidConstatns.VALID_INPUT_PATTERN)) {
+        if (!string.matches(Format.VALID_INPUT_PATTERN)) {
             throw new IllegalArgumentException(ERROR_PREFIX + "올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
         }
     }

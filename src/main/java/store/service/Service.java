@@ -1,6 +1,6 @@
 package store.service;
 
-import store.common.constant.ValidConstatns;
+import store.common.format.Format;
 import store.common.parser.FileParser;
 import store.domain.Product;
 import store.domain.Promotions;
@@ -30,45 +30,7 @@ public class Service {
         this.promotionRepository = promotionRepository;
     }
 
-    public void storeProductAndPromotionsListByFile(String productFile, String promotionsFile) {
-        storeProductListByFile(productFile);
-        storePromotionsListByFile(promotionsFile);
-    }
-
-
-    private void storePromotionsListByFile(String promotionsFile) {
-        List<String> promotionListByFile = FileParser.readMarkdownFile(promotionsFile);
-        for (int i = 1; i < promotionListByFile.size(); i++) {
-            Promotions promotion = splitPromotionList(promotionListByFile.get(i));
-            validator.validateIsNull(Optional.of(promotion));
-            promotionRepository.save(promotion);
-        }
-    }
-
-    private Promotions splitPromotionList(String promotionLineByFile) {
-        String[] productLine = promotionLineByFile.split(",");
-        return new Promotions(
-                productLine[0],
-                Integer.parseInt(productLine[1]),
-                Integer.parseInt(productLine[2]),
-                productLine[3],
-                productLine[4]
-        );
-    }
-
-    private Set<String> productName = new LinkedHashSet<>();
-    private void storeProductListByFile(String productFile) {
-        List<String> productListByFile = FileParser.readMarkdownFile(productFile);
-
-        for (int i = 1; i < productListByFile.size(); i++) {
-            Product product = splitProductList(productListByFile.get(i));
-            validator.validateIsNull(Optional.of(product));
-            productName.add(product.getName());
-            checkAndstoreProduct(product);
-        }
-    }
-
-    public void printProduct(){
+    public void printProduct(){ // 이걸 분리해야할 것 같습니다
         for(String name : productName){
             Product product = productRepository.findByName(name);
             if(product != null) {
@@ -96,17 +58,9 @@ public class Service {
         }
     }
 
-    private Product splitProductList(String productLineByFile) {
-        String[] productLine = productLineByFile.split(",");
-        return new Product(
-                productLine[0],
-                productLine[1],
-                productLine[2],
-                productLine[3]);
-    }
 
     public Cart InputCart(String cartInfo) {
-        List<String> productInfoBycart = Arrays.stream(cartInfo.split(ValidConstatns.SEPARATOR))
+        List<String> productInfoBycart = Arrays.stream(cartInfo.split(Format.SEPARATOR))
                 .map(String::trim)
                 .collect(Collectors.toList());
         Map<Product, Promotions> products = createProduct(productInfoBycart);

@@ -2,8 +2,8 @@ package store;
 
 import store.controller.Controller;
 import store.domain.User;
-import store.message.Message;
-import store.message.MessageManager;
+import store.io.IOManager;
+import store.io.IOMessage;
 import store.repository.*;
 import store.service.Service;
 import store.validator.Validator;
@@ -14,7 +14,7 @@ public class Application {
     public static void main(String[] args) {
         // TODO: 프로그램 구현
 
-        MessageManager manager = new Message();
+        IOManager manager = new IOMessage();
         InputView inputView = new InputView(manager);
         OutputView outputView = new OutputView(manager);
         Validator validator = new Validator();

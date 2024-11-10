@@ -3,16 +3,16 @@ package store.view;
 import store.common.constant.OutputConstants;
 import store.domain.Product;
 import store.dto.Receipt;
-import store.message.MessageManager;
+import store.io.IOManager;
 
 import java.text.NumberFormat;
 import java.util.List;
 
 public class OutputView {
 
-    private final MessageManager manager;
+    private final IOManager manager;
 
-    public OutputView(MessageManager manager) {
+    public OutputView(IOManager manager) {
         this.manager = manager;
     }
 

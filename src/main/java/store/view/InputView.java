@@ -4,12 +4,12 @@ import store.common.constant.InputConstants;
 import store.domain.Product;
 import store.domain.Promotions;
 import store.dto.OneCart;
-import store.message.MessageManager;
+import store.io.IOManager;
 
 public class InputView {
-    private final MessageManager manager;
+    private final IOManager manager;
 
-    public InputView(MessageManager manager) {
+    public InputView(IOManager manager) {
         this.manager = manager;
     }
 

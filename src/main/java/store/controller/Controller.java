@@ -1,6 +1,7 @@
 package store.controller;
 
 import store.common.constant.InputConstants;
+import store.common.format.Format;
 import store.domain.Product;
 import store.domain.Promotions;
 import store.domain.User;
@@ -8,24 +9,26 @@ import store.dto.Cart;
 import store.dto.Receipt;
 import store.dto.OneCart;
 import store.service.Service;
+import store.service.StockService;
 import store.validator.Validator;
 import store.view.InputView;
 import store.view.OutputView;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.concurrent.ForkJoinPool;
 
 public class Controller {
     private final Service service;
+    private final StockService stockService;
     private final InputView inputView;
     private final OutputView outputView;
     private final Validator validator;
 
     private final User user;
 
-    public Controller(Service service, InputView inputView, OutputView outputView, Validator validator, User user) {
+    public Controller(Service service, StockService stockService, InputView inputView, OutputView outputView, Validator validator, User user) {
         this.service = service;
+        this.stockService = stockService;
         this.inputView = inputView;
         this.outputView = outputView;
         this.validator = validator;
@@ -36,7 +39,7 @@ public class Controller {
         while(true) {
             outputView.welcome();
 
-            service.storeProductAndPromotionsListByFile(InputConstants.PRODUCT_FILE, InputConstants.PROMOION_FILE);
+            stockService.storeProductAndPromotionsListByFile(Format.PRODUCT_FILE, Format.PROMOION_FILE);
             service.printProduct();
             Cart cart = InputProductNameAndNum();
 

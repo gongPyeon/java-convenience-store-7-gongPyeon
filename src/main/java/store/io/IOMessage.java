@@ -1,10 +1,10 @@
-package store.message;
+package store.io;
 
 import camp.nextstep.edu.missionutils.Console;
 
-public class Message implements MessageManager{
+public class IOMessage implements IOManager{
     @Override
-    public void printMessage(String message) {
+    public void printMessage(Object message) {
         System.out.println(message);
     }
 
