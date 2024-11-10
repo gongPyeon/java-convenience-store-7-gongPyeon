@@ -3,15 +3,13 @@ package store.view;
 import store.common.constant.OutputConstants;
 import store.domain.Product;
 import store.dto.Receipt;
-import store.io.IOManager;
 
 import java.text.NumberFormat;
 import java.util.List;
-import java.util.Set;
 
 public class OutputView {
 
-    public void welcome(){
+    public void welcome() {
         System.out.println(OutputConstants.WERLCOME_OUTPUT);
     }
 
@@ -29,7 +27,7 @@ public class OutputView {
     private void printProductList(List<Product> productList) {
         for (Product product : productList) {
             System.out.println(String.format(OutputConstants.CS_RECEIPT_FORMAT_OUTPUT,
-                    product.getName(), product.getQuantity(), (product.getQuantity() *product.getPrice())));
+                    product.getName(), product.getQuantity(), (product.getQuantity() * product.getPrice())));
         }
     }
 
@@ -56,8 +54,8 @@ public class OutputView {
     }
 
     public void printProduct(List<Product> productNames) { // domain param
-        for(Product product : productNames){
-            if(product != null) {
+        for (Product product : productNames) {
+            if (product != null) {
                 System.out.println(product);
             }
         }
