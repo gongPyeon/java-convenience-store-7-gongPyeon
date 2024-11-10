@@ -1,12 +1,14 @@
 package store.domain;
 
+import store.common.format.Format;
+
 import java.text.NumberFormat;
 
 public class Product {
     private final String name;
     private final int price; // null일 경우 Integer
     private int quantity;
-    private  final String promotion;
+    private String promotion;
 
     private int promotionCount = 0;
 
@@ -58,9 +60,11 @@ public class Product {
 
         if (quantity > 0) {
             result.append(quantity).append("개 ");
+        }else{
+            result.append(Format.OUT_OF_STOCK);
         }
 
-        if (!"null".equals(promotion)) {  // promotion이 "null"이 아닐 때만 추가
+        if (!Format.NULL.equals(promotion)) {  // promotion이 "null"이 아닐 때만 추가
             result.append(promotion);
         }
 
@@ -89,5 +93,9 @@ public class Product {
 
     public int getPrice() {
         return price;
+    }
+
+    public void updatePromotion() {
+        this.promotion = Format.NULL;
     }
 }

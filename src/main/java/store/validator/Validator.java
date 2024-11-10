@@ -62,7 +62,7 @@ public class Validator {
         LocalDate startDate = LocalDate.parse(promotion.getStartDate(), DateTimeFormatter.ofPattern(Format.LOCAL_DATE));
         LocalDate endDate = LocalDate.parse(promotion.getEndDate(), DateTimeFormatter.ofPattern(Format.LOCAL_DATE));
 
-        if(startDate.isBefore(currentDate) || endDate.isAfter(currentDate))
+        if(currentDate.isBefore(startDate) || currentDate.isAfter(endDate))
             return false;
 
         return true; // 행사기간 내 존재

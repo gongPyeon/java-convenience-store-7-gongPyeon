@@ -80,7 +80,7 @@ public class StockService {
     }
 
     private Product createDefaultProduct(Product product) {
-        return new Product(product.getName(), Integer.toString(product.getPrice()), Format.ZERO, Format.OUT_OF_STOCK);
+        return new Product(product.getName(), Integer.toString(product.getPrice()), Format.ZERO, Format.NULL);
     }
 
     private List<Product> calculateProductList(Cart cart) {
@@ -100,6 +100,9 @@ public class StockService {
         Product promotionByStock = promotionProductRepository.findByName(product.getName());
         if(promotionByStock != null){
             promotionByStock.updateQunatity(product.getPromotionCount()); // 기존 - 프로모션 개수
+            if(promotionByStock.getQuantity() <= 0){
+                promotionByStock.updatePromotion();
+            }
             promotionProductRepository.update(promotionByStock);
         }
     }

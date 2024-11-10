@@ -2,6 +2,8 @@ package store.controller;
 
 import store.common.handler.InputHandler;
 import store.common.format.Format;
+import store.domain.Product;
+import store.domain.Promotions;
 import store.domain.User;
 import store.dto.Cart;
 import store.dto.Receipt;
@@ -14,6 +16,8 @@ import store.view.InputView;
 import store.view.OutputView;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Controller {
     private final ReceiptService receiptService;
@@ -49,7 +53,7 @@ public class Controller {
         outputView.welcome();
         outputView.printProduct(receiptService.getProductSet());
         Cart cart = inputPurchaseProduct(); // 사용자가 바구니에 넣은 product(promotion)
-
+        
         List<OneCart> promotableItems = promotionService.filterPromotableItems(cart); // 바구니에서 유효한 프로모션 아이템만 가져오기
         handlePromotions(promotableItems);
 

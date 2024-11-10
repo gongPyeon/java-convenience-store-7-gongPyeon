@@ -29,9 +29,8 @@ public class PromotionService {
 
     public List<OneCart> filterPromotableItems(Cart cart) {
         List<OneCart> promotableItems = new LinkedList<>();
-        for (Map.Entry<Product, Promotions> entry : cart.getCart().entrySet()) {
-            Product product = entry.getKey();
-            Promotions promotion = entry.getValue();
+        for (Product product : cart.getCart().keySet()) {
+            Promotions promotion = cart.getCart().get(product);
 
             if (validator.validatePromotion(promotion)) {
                 promotableItems.add(new OneCart(product, promotion));

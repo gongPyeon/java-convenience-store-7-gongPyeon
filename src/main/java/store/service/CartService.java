@@ -74,7 +74,6 @@ public class CartService {
         String price = getPrice(name);
         String quantity = product.get(1);
         String promotion = getPromotions(name);
-        System.out.println(price);
 
         return new Product(name, price, quantity, promotion);
     }
