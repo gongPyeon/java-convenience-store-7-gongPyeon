@@ -60,7 +60,7 @@ public class Validator {
         LocalDate currentDate = DateTimes.now().toLocalDate();
 
         LocalDate startDate = LocalDate.parse(promotion.getStartDate(), DateTimeFormatter.ofPattern(Format.LOCAL_DATE));
-        LocalDate endDate = LocalDate.parse(promotion.getStartDate(), DateTimeFormatter.ofPattern(Format.LOCAL_DATE));
+        LocalDate endDate = LocalDate.parse(promotion.getEndDate(), DateTimeFormatter.ofPattern(Format.LOCAL_DATE));
 
         if(startDate.isBefore(currentDate) || endDate.isAfter(currentDate))
             return false;
