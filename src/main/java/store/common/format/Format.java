@@ -15,6 +15,6 @@ public class Format {
     public static final String LOCAL_DATE = "yyyy-MM-dd";
 
     public static final String ZERO = "0";
-    public static final String VALID_INPUT_PATTERN = "^\\[[a-zA-Z가-힣]+\\s*-\\s?\\d+\\](\\s*" + SEPARATOR + "\\s*\\[[a-zA-Z가-힣]+\\s*-\\s?\\d+\\])*$";
+    public static final String VALID_INPUT_PATTERN = "^\\s*\\[\\s*[a-zA-Z가-힣]+\\s*-\\s?\\d+\\s*\\](\\s*" + SEPARATOR + "\\s*\\[\\s*[a-zA-Z가-힣]+\\s*-\\s?\\d+\\s*\\])*$";
 
 }

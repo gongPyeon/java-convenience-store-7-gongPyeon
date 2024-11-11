@@ -16,6 +16,7 @@ import store.view.InputView;
 import store.view.OutputView;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class Controller {
     private final ReceiptService receiptService;

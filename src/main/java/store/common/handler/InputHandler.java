@@ -4,6 +4,7 @@ import store.common.format.Format;
 import store.validator.Validator;
 import store.view.InputView;
 
+import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 
 public class InputHandler {
