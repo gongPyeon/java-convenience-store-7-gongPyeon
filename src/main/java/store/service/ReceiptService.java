@@ -70,7 +70,7 @@ public class ReceiptService {
     private int calculateMembership(int total, boolean checkMemberShip) {
         int membershipDiscount = 0;
         if(checkMemberShip) {
-            membershipDiscount = (int) (total * 0.3);
+            membershipDiscount = ((int) (total * 0.3) / 1000) * 1000;
             if(membershipDiscount > 8000) // 상수처리
                 membershipDiscount = 8000;
         }
