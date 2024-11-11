@@ -1,5 +1,6 @@
 package store.domain;
 
+import store.common.constant.OutputConstants;
 import store.common.format.Format;
 import store.exception.ErrorMessage;
 
@@ -23,10 +24,24 @@ public class Product {
         validateNumberRange(this.quantity);
     }
 
-    public void updatePromotionCount(int num){
-        promotionCount = promotionCount - num;
+    public String getName() {
+        return name;
     }
 
+    public String getPromotion() {
+        return promotion;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public int getPromotionCount() {
+        return promotionCount;
+    }
+    public int getPrice() {
+        return price;
+    }
 
     private int validateNumber(String string) {
         try{
@@ -40,36 +55,6 @@ public class Product {
         if(num < 0){
             throw ErrorMessage.NUMBER_NEGATIVE.getException();
         }
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPromotion() {
-        return promotion;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder("- " + name + " " +
-                NumberFormat.getInstance().format(price) + "원 ");
-
-        if (quantity > 0) {
-            result.append(quantity).append("개 ");
-        }else{
-            result.append(Format.OUT_OF_STOCK);
-        }
-
-        if (!Format.NULL.equals(promotion)) {  // promotion이 "null"이 아닐 때만 추가
-            result.append(promotion);
-        }
-
-        return result.toString();
     }
 
     public void setPromotionCount(int promotionCount) {
@@ -88,15 +73,33 @@ public class Product {
         quantity += add;
     }
 
-    public int getPromotionCount() {
-        return promotionCount;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
     public void updatePromotion() {
         this.promotion = Format.NULL;
     }
+
+    public void updatePromotionCount(int num){
+        promotionCount = promotionCount - num;
+    }
+
+    private String printQuantity(int quantity){
+        if (quantity > 0) {
+            return Integer.toString(quantity)+"개 ";
+        }
+        return Format.OUT_OF_STOCK;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append(String.format(OutputConstants.PRODUCT_OUTPUT, name,
+                NumberFormat.getInstance().format(price),
+                printQuantity(quantity)));
+
+        if (!Format.NULL.equals(promotion)) {
+            result.append(promotion);
+        }
+        return result.toString();
+    }
+
+
 }
