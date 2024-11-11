@@ -9,7 +9,10 @@ public enum ErrorMessage {
     PRODUCT_NOT_FOUND("존재하지 않는 상품입니다. 다시 입력해 주세요.", NoSuchElementException.class),
     EXCEED_STOCK("재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.", IllegalArgumentException.class),
     INVALID_INPUT("잘못된 입력입니다. 다시 입력해 주세요.", IllegalArgumentException.class),
-    DUPLICATE_PRODUCT("중복된 상품이 있습니다. 다시 입력해 주세요.", IllegalArgumentException.class);
+    DUPLICATE_PRODUCT("중복된 상품이 있습니다. 다시 입력해 주세요.", IllegalArgumentException.class),
+
+    NUMBER_NOT("숫자가 아닙니다. 다시 입력해주세요.", IllegalArgumentException.class),
+    NUMBER_NEGATIVE("음수를 입력했습니다. 다시 입력해주세요.", IllegalArgumentException.class);
 
     private static final String ERROR_PREFIX = "[ERROR] ";
 

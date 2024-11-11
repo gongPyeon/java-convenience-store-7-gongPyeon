@@ -1,6 +1,7 @@
 package store.domain;
 
 import store.common.format.Format;
+import store.exception.ErrorMessage;
 
 import java.text.NumberFormat;
 
@@ -31,13 +32,13 @@ public class Product {
         try{
             return Integer.parseInt(string);
         }catch (IllegalArgumentException e){
-            throw new IllegalArgumentException("숫자가 아닙니다");
+            throw ErrorMessage.NUMBER_NOT.getException();
         }
     }
 
     private void validateNumberRange(int num){
         if(num < 0){
-            throw new IllegalArgumentException("음수입니다");
+            throw ErrorMessage.NUMBER_NEGATIVE.getException();
         }
     }
 

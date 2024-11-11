@@ -13,10 +13,4 @@ public class User {
         return membership;
     }
 
-    public boolean checkMemberShip(String response) {
-        if(response.equals(Format.YES)){
-            return true;
-        }
-        return  false;
-    }
 }
